@@ -1,7 +1,10 @@
 package com.feis.eduhub.backend.features.credentials;
 
+import java.sql.Connection;
 import java.time.Instant;
 import java.util.List;
+
+import com.feis.eduhub.backend.common.config.DatabaseConnection;
 
 /**
  * Service class responsible for managing credentials-related operations such as
@@ -14,23 +17,40 @@ import java.util.List;
  */
 public class CredentialsService {
     private final CredentialsDao credentialsDao = new CredentialsDao();
+    private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
 
     public List<Credentials> getAllCredentials() {
-        return credentialsDao.getAll();
+        try (Connection conn = databaseConnection.getConnection()) {
+            return credentialsDao.getAll(conn);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not fetch data", e);
+        }
     }
 
     public Credentials createCredentials(Credentials credentials) {
         setUpdatedAtTime(credentials);
-        return credentialsDao.create(credentials);
+        try (Connection conn = databaseConnection.getConnection()) {
+            return credentialsDao.create(credentials, conn);
+        } catch (Exception e) {
+            throw new RuntimeException("Error while creating credentials", e);
+        }
     }
 
     public void updateCredentials(long credentialsId, Credentials credentials) {
         setUpdatedAtTime(credentials);
-        credentialsDao.update(credentialsId, credentials);
+        try (Connection conn = databaseConnection.getConnection()) {
+            credentialsDao.update(credentialsId, credentials, conn);
+        } catch (Exception e) {
+            throw new RuntimeException("Error while updating credentials", e);
+        }
     }
 
     public void deleteCredentials(long credentialsId) {
-        credentialsDao.delete(credentialsId);
+        try (Connection conn = databaseConnection.getConnection()) {
+            credentialsDao.delete(credentialsId, conn);
+        } catch (Exception e) {
+            throw new RuntimeException("Error while deleting credentials", e);
+        }
     }
 
     /**
