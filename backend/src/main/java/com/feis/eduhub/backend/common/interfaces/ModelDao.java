@@ -1,5 +1,8 @@
 package com.feis.eduhub.backend.common.interfaces;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
  * Interface representing the more generic
  * {@link com.feis.eduhub.backend.common.interfaces.Dao Dao} interface as a more
@@ -11,10 +14,10 @@ package com.feis.eduhub.backend.common.interfaces;
  * @see Dao
  */
 public interface ModelDao<T> extends Dao<T> {
-    T create(T obj);
+    T create(T obj, Connection conn) throws SQLException;
 
-    void update(long id, T obj);
+    void update(long id, T obj, Connection conn) throws SQLException;
 
-    void delete(long id);
+    void delete(long id, Connection conn) throws SQLException;
 
 }
