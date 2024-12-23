@@ -24,7 +24,6 @@ import io.javalin.http.ExceptionHandler;
  * @see EndpointsRegister
  */
 public class AppBuilder {
-    private static final String BASE_V1_ENDPOINT = "/api/v1";
     private static final Logger logger = LoggerFactory.getLogger("System");
     private final List<EndpointsRegister> appControllers;
     private final int port;
@@ -121,9 +120,5 @@ public class AppBuilder {
                     .build();
             ctx.status(STATUS_CODE).json(response);
         });
-    }
-
-    public static String getBaseV1Endpoint() {
-        return BASE_V1_ENDPOINT;
     }
 }
