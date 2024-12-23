@@ -32,6 +32,7 @@ CREATE TABLE credentials (
     credentials_id BIGSERIAL PRIMARY KEY,
     email VARCHAR(40) NOT NULL UNIQUE,
     password VARCHAR(256) NOT NULL,
+    updated_at BIGINT NOT NULL,
     account_id INT NOT NULL UNIQUE
 );
 
