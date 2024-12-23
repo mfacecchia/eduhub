@@ -1,9 +1,12 @@
 package com.feis.eduhub.backend.features.account;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.feis.eduhub.backend.common.config.DatabaseConnection;
+import com.feis.eduhub.backend.features.credentials.Credentials;
+import com.feis.eduhub.backend.features.credentials.CredentialsDao;
 
 /**
  * Service class responsible for managing account-related operations such as
@@ -17,6 +20,7 @@ import com.feis.eduhub.backend.common.config.DatabaseConnection;
  */
 public class AccountService {
     private final AccountDao accountDao = new AccountDao();
+    private final CredentialsDao credentialsDao = new CredentialsDao();
     private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
 
     public List<Account> getAllAccounts() {
@@ -27,12 +31,19 @@ public class AccountService {
         }
     }
 
-    public Account createAccount(Account account) {
+    public Account createAccount(Account account, Credentials credentials) {
         try (Connection conn = databaseConnection.getConnection()) {
-            Account createdAcc = accountDao.create(account, conn);
-            // TODO: WIP
-            return createdAcc;
-        } catch (Exception e) {
+            try {
+                accountDao.create(account, conn);
+                updateCredentialData(credentials, account);
+                credentialsDao.create(credentials, conn);
+                conn.commit();
+                return account;
+            } catch (SQLException e) {
+                conn.rollback();
+                throw new RuntimeException(e);
+            }
+        } catch (SQLException e) {
             throw new RuntimeException("Error while creating account", e);
         }
     }
@@ -51,5 +62,12 @@ public class AccountService {
         } catch (Exception e) {
             throw new RuntimeException("Error while deleting account", e);
         }
+    }
+
+    private void updateCredentialData(Credentials credentials, Account account) {
+        if (account.getAccountId() <= 0) {
+            throw new IllegalStateException("accountId cannot be lower than 1");
+        }
+        credentials.setAccountId(account.getAccountId());
     }
 }
