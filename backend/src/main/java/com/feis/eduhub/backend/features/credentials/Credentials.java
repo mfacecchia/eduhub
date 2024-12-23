@@ -9,24 +9,24 @@ import lombok.NonNull;
 @NoArgsConstructor
 @Data
 public class Credentials {
-    private long credentials_id;
+    private long credentialsId;
     @NonNull
     private String email;
     @NonNull
     private String password;
-    private long updated_at;
-    private long account_id;
+    private long updatedAt;
+    private long accountId;
 
-    public Credentials(String email, String password, long updated_at) {
+    public Credentials(String email, String password, long updatedAt) {
         this.email = email;
         this.password = password;
-        this.updated_at = updated_at;
+        this.updatedAt = updatedAt;
     }
 
-    public Credentials(String email, String password, long updated_at, long account_id) {
+    public Credentials(String email, String password, long updatedAt, long accountId) {
         this.email = email;
         this.password = password;
-        this.updated_at = updated_at;
-        this.account_id = account_id;
+        this.updatedAt = updatedAt;
+        this.accountId = accountId;
     }
 }
