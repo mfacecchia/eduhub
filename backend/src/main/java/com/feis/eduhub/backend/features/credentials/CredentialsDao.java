@@ -10,96 +10,71 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.feis.eduhub.backend.common.config.DatabaseConnection;
 import com.feis.eduhub.backend.common.interfaces.ModelDao;
 import com.feis.eduhub.backend.common.lib.Sql;
 
 public class CredentialsDao implements ModelDao<Credentials> {
     private final String TABLE_NAME = "credentials";
-    private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
 
     @Override
-    public Optional<Credentials> findById(long id) {
+    public Optional<Credentials> findById(long id, Connection conn) throws SQLException {
         String query = String.format("SELECT * FROM \"%s\" WHERE credentials_id = ?", TABLE_NAME);
-        try (Connection conn = databaseConnection.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(query);
-            Sql.setParams(ps, Arrays.asList(id));
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return Optional.of(getTableData(rs));
-            }
-            return Optional.empty();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error while fetching data", e);
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(id));
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return Optional.of(getTableData(rs));
         }
+        return Optional.empty();
     }
 
     @Override
-    public List<Credentials> getAll() {
+    public List<Credentials> getAll(Connection conn) throws SQLException {
         List<Credentials> credentialsList = new ArrayList<>();
         String query = String.format("SELECT * FROM \"%s\"", TABLE_NAME);
-        try (Connection conn = databaseConnection.getConnection()) {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                credentialsList.add(getTableData(rs));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error while getting all credentials", e);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        while (rs.next()) {
+            credentialsList.add(getTableData(rs));
         }
         return credentialsList;
     }
 
     @Override
-    public Credentials create(Credentials Credentials) {
+    public Credentials create(Credentials Credentials, Connection conn) throws SQLException {
         String query = String.format(
                 "INSERT INTO \"%s\" (email, password, updated_at, account_id) VALUES (?, ?, ?, ?)",
                 TABLE_NAME);
-        try (Connection conn = databaseConnection.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            Sql.setParams(ps,
-                    Arrays.asList(Credentials.getEmail(), Credentials.getPassword(), Credentials.getUpdatedAt(),
-                            Credentials.getAccountId()));
-            ps.executeUpdate();
-            conn.commit();
-            ResultSet generatedKeys = ps.getGeneratedKeys();
-            if (!generatedKeys.next()) {
-                throw new Exception("User not created");
-            }
-            Credentials.setCredentialsId(generatedKeys.getLong(1));
-            return Credentials;
-        } catch (Exception e) {
-            throw new RuntimeException("Error while creating Credentials", e);
+        PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        Sql.setParams(ps,
+                Arrays.asList(Credentials.getEmail(), Credentials.getPassword(), Credentials.getUpdatedAt(),
+                        Credentials.getAccountId()));
+        ps.executeUpdate();
+        ResultSet generatedKeys = ps.getGeneratedKeys();
+        if (!generatedKeys.next()) {
+            throw new RuntimeException("User not created");
         }
+        Credentials.setCredentialsId(generatedKeys.getLong(1));
+        return Credentials;
     }
 
     @Override
-    public void update(long id, Credentials Credentials) {
+    public void update(long id, Credentials Credentials, Connection conn) throws SQLException {
         String query = String.format(
                 "UPDATE \"%s\" SET email = COALESCE(?, email), password = COALESCE(?, password), updated_at = COALESCE(?, updated_at) WHERE credentials_id = ?",
                 TABLE_NAME);
-        try (Connection conn = databaseConnection.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(query);
-            Sql.setParams(ps, Arrays.asList(Credentials.getEmail(),
-                    Credentials.getPassword(), Credentials.getUpdatedAt(), id));
-            ps.executeUpdate();
-            conn.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error while updating password", e);
-        }
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(Credentials.getEmail(),
+                Credentials.getPassword(), Credentials.getUpdatedAt(), id));
+        ps.executeUpdate();
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(long id, Connection conn) throws SQLException {
         String query = String.format("DELETE FROM \"%s\" WHERE credentials_id = ?", TABLE_NAME);
-        try (Connection conn = databaseConnection.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(query);
-            Sql.setParams(ps, Arrays.asList(id));
-            ps.executeUpdate();
-            conn.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error while deleting credentials", e);
-        }
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(id));
+        ps.executeUpdate();
     }
 
     private Credentials getTableData(ResultSet rs) throws SQLException {
