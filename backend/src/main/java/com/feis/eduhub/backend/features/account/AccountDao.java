@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.feis.eduhub.backend.common.config.DatabaseConnection;
-import com.feis.eduhub.backend.common.interfaces.Dao;
+import com.feis.eduhub.backend.common.interfaces.ModelDao;
 import com.feis.eduhub.backend.common.lib.Sql;
 
-public class AccountDao implements Dao<Account> {
+public class AccountDao implements ModelDao<Account> {
     private final String TABLE_NAME = "account";
     private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
 

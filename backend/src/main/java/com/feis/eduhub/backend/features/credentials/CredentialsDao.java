@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.feis.eduhub.backend.common.config.DatabaseConnection;
-import com.feis.eduhub.backend.common.interfaces.Dao;
+import com.feis.eduhub.backend.common.interfaces.ModelDao;
 import com.feis.eduhub.backend.common.lib.Sql;
 
-public class CredentialsDao implements Dao<Credentials> {
+public class CredentialsDao implements ModelDao<Credentials> {
     private final String TABLE_NAME = "credentials";
     private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
 
@@ -36,18 +36,18 @@ public class CredentialsDao implements Dao<Credentials> {
 
     @Override
     public List<Credentials> getAll() {
-        List<Credentials> CredentialssList = new ArrayList<>();
+        List<Credentials> credentialsList = new ArrayList<>();
         String query = String.format("SELECT * FROM \"%s\"", TABLE_NAME);
         try (Connection conn = databaseConnection.getConnection()) {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                CredentialssList.add(getTableData(rs));
+                credentialsList.add(getTableData(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error while getting all credentials", e);
         }
-        return CredentialssList;
+        return credentialsList;
     }
 
     @Override
