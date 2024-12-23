@@ -30,7 +30,9 @@ public class CredentialsService {
     public Credentials createCredentials(Credentials credentials) {
         setUpdatedAtTime(credentials);
         try (Connection conn = databaseConnection.getConnection()) {
-            return credentialsDao.create(credentials, conn);
+            credentialsDao.create(credentials, conn);
+            conn.commit();
+            return credentials;
         } catch (Exception e) {
             throw new RuntimeException("Error while creating credentials", e);
         }
@@ -40,6 +42,7 @@ public class CredentialsService {
         setUpdatedAtTime(credentials);
         try (Connection conn = databaseConnection.getConnection()) {
             credentialsDao.update(credentialsId, credentials, conn);
+            conn.commit();
         } catch (Exception e) {
             throw new RuntimeException("Error while updating credentials", e);
         }
@@ -48,6 +51,7 @@ public class CredentialsService {
     public void deleteCredentials(long credentialsId) {
         try (Connection conn = databaseConnection.getConnection()) {
             credentialsDao.delete(credentialsId, conn);
+            conn.commit();
         } catch (Exception e) {
             throw new RuntimeException("Error while deleting credentials", e);
         }
