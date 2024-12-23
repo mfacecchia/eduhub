@@ -41,31 +41,31 @@ public class CredentialsDao implements ModelDao<Credentials> {
     }
 
     @Override
-    public Credentials create(Credentials Credentials, Connection conn) throws SQLException {
+    public Credentials create(Credentials credentials, Connection conn) throws SQLException {
         String query = String.format(
                 "INSERT INTO \"%s\" (email, password, updated_at, account_id) VALUES (?, ?, ?, ?)",
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         Sql.setParams(ps,
-                Arrays.asList(Credentials.getEmail(), Credentials.getPassword(), Credentials.getUpdatedAt(),
-                        Credentials.getAccountId()));
+                Arrays.asList(credentials.getEmail(), credentials.getPassword(), credentials.getUpdatedAt(),
+                        credentials.getAccountId()));
         ps.executeUpdate();
         ResultSet generatedKeys = ps.getGeneratedKeys();
         if (!generatedKeys.next()) {
             throw new RuntimeException("User not created");
         }
-        Credentials.setCredentialsId(generatedKeys.getLong(1));
-        return Credentials;
+        credentials.setCredentialsId(generatedKeys.getLong(1));
+        return credentials;
     }
 
     @Override
-    public void update(long id, Credentials Credentials, Connection conn) throws SQLException {
+    public void update(long id, Credentials credentials, Connection conn) throws SQLException {
         String query = String.format(
                 "UPDATE \"%s\" SET email = COALESCE(?, email), password = COALESCE(?, password), updated_at = COALESCE(?, updated_at) WHERE credentials_id = ?",
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query);
-        Sql.setParams(ps, Arrays.asList(Credentials.getEmail(),
-                Credentials.getPassword(), Credentials.getUpdatedAt(), id));
+        Sql.setParams(ps, Arrays.asList(credentials.getEmail(),
+                credentials.getPassword(), credentials.getUpdatedAt(), id));
         ps.executeUpdate();
     }
 
