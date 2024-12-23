@@ -25,6 +25,7 @@ public class DatabaseConnection {
             pool.setPassword(configValues.get("DB_PASSWORD"));
 
             // Additional pool config
+            pool.setAutoCommitOnClose(false);
             pool.setInitialPoolSize(5);
             pool.setMinPoolSize(1);
             pool.setMaxPoolSize(5);
