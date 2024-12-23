@@ -1,11 +1,11 @@
 package com.feis.eduhub.backend;
 
-/**
- * Hello world!
- *
- */
+import com.feis.eduhub.backend.common.config.AppBuilder;
+
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        AppBuilder appBuilder = new AppBuilder(null);
+        appBuilder.configureEndpoints(true);
+        appBuilder.start();
     }
 }
