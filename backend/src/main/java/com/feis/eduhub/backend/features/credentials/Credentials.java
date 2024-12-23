@@ -17,6 +17,11 @@ public class Credentials {
     private long updatedAt;
     private long accountId;
 
+    public Credentials(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     public Credentials(String email, String password, long updatedAt) {
         this.email = email;
         this.password = password;
