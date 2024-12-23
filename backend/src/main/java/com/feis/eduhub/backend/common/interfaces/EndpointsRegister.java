@@ -1,4 +1,4 @@
-package com.feis.eduhub.backend.common.dto.interfaces;
+package com.feis.eduhub.backend.common.interfaces;
 
 import io.javalin.Javalin;
 
