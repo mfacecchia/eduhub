@@ -44,6 +44,8 @@ public class DatabaseConnection {
     }
 
     public Connection getConnection() throws SQLException {
-        return pool.getConnection();
+        Connection conn = pool.getConnection();
+        conn.setAutoCommit(false);
+        return conn;
     }
 }
