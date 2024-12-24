@@ -63,7 +63,7 @@ public class CredentialsDao implements ModelDao<Credentials> {
         ps.executeUpdate();
         ResultSet generatedKeys = ps.getGeneratedKeys();
         if (!generatedKeys.next()) {
-            throw new RuntimeException("User not created");
+            throw new SQLException("User not created");
         }
         credentials.setCredentialsId(generatedKeys.getLong(1));
         return credentials;

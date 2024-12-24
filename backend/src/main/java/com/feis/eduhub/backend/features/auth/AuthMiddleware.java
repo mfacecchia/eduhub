@@ -1,10 +1,10 @@
 package com.feis.eduhub.backend.features.auth;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.feis.eduhub.backend.common.exceptions.TokenValidationException;
 import com.feis.eduhub.backend.features.auth.jwt.JsonWebToken;
 import com.feis.eduhub.backend.features.auth.jwt.JwtData;
 import com.feis.eduhub.backend.features.auth.jwt.JwtService;
+import com.feis.eduhub.backend.features.auth.jwt.errors.TokenValidationException;
 
 import io.javalin.http.Handler;
 import io.javalin.http.UnauthorizedResponse;
@@ -16,7 +16,7 @@ public class AuthMiddleware {
      * Middleware handler for user authentication state check.
      * 
      * @param strict                   If true, throws
-     *                                 {@link com.feis.eduhub.backend.common.exceptions.TokenValidationException
+     *                                 {@link com.feis.eduhub.backend.features.auth.jwt.errors.TokenValidationException
      *                                 TokenValidationException} when no
      *                                 token is present in the header as a cookie
      *                                 named {@code sessionId}.

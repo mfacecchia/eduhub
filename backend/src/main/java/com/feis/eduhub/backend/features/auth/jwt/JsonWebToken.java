@@ -14,6 +14,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.feis.eduhub.backend.common.lib.Environment;
+import com.feis.eduhub.backend.features.auth.jwt.errors.TokenGenerationException;
 
 /**
  * Utility class to sign and verify JWTs through HMAC256 algorithm. The default
@@ -45,15 +46,15 @@ public class JsonWebToken {
      *                   otherwise {@code false}
      * @return an {@link com.feis.eduhub.backend.features.auth.jwt.JwtData JWTData}
      *         Object representing the most useful token information.
-     * @throws JWTCreationException if the claims could not be converted to a valid
-     *                              JSON or there was a problem with the signing
-     *                              key.
+     * @throws TokenGenerationException if the claims could not be converted to a
+     *                                  valid JSON or there was a problem with the
+     *                                  signing key.
      * 
      * @see Builder
      * @see JwtData
      */
     public static JwtData generateToken(long accountId, boolean rememberMe)
-            throws JWTCreationException {
+            throws TokenGenerationException {
 
         String jti = UUID.randomUUID().toString();
         Instant exp = null;
@@ -66,7 +67,12 @@ public class JsonWebToken {
             exp = Instant.now().plusSeconds(DEFAULT_EXPIRATION_TIME);
             jwtBuilder.withExpiresAt(exp);
         }
-        String token = jwtBuilder.sign(ALGORITHM);
+        String token;
+        try {
+            token = jwtBuilder.sign(ALGORITHM);
+        } catch (JWTCreationException e) {
+            throw new TokenGenerationException("Error while generating authentication token", e);
+        }
         return new JwtData(
                 token,
                 accountId,

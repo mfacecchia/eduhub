@@ -51,7 +51,7 @@ public class AccountDao implements ModelDao<Account> {
         ps.executeUpdate();
         ResultSet generatedKeys = ps.getGeneratedKeys();
         if (!generatedKeys.next()) {
-            throw new RuntimeException("User not created");
+            throw new SQLException("User not created");
         }
         account.setAccountId(generatedKeys.getLong(1));
         return account;

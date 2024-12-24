@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.feis.eduhub.backend.common.config.DatabaseConnection;
+import com.feis.eduhub.backend.common.exceptions.AppException;
+import com.feis.eduhub.backend.common.exceptions.DataFetchException;
+import com.feis.eduhub.backend.common.exceptions.DatabaseQueryException;
+import com.feis.eduhub.backend.common.exceptions.NotFoundException;
 import com.feis.eduhub.backend.features.credentials.Credentials;
 import com.feis.eduhub.backend.features.credentials.CredentialsDao;
 import com.feis.eduhub.backend.features.credentials.CredentialsService;
@@ -26,25 +30,25 @@ public class AccountService {
     private final CredentialsService credentialsService = new CredentialsService();
     private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
 
-    public Account getAccountById(long id) {
+    public Account getAccountById(long id) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             return accountDao.findById(id, conn).get();
         } catch (NoSuchElementException e) {
-            throw new RuntimeException("Account not found", e);
-        } catch (Exception e) {
-            throw new RuntimeException("Could not fetch data", e);
+            throw new NotFoundException("Account not found", e);
+        } catch (SQLException e) {
+            throw new DataFetchException("Could not fetch data", e);
         }
     }
 
-    public List<Account> getAllAccounts() {
+    public List<Account> getAllAccounts() throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             return accountDao.getAll(conn);
-        } catch (Exception e) {
-            throw new RuntimeException("Could not fetch data", e);
+        } catch (SQLException e) {
+            throw new DataFetchException("Could not fetch data", e);
         }
     }
 
-    public Account createAccount(Account account, Credentials credentials) {
+    public Account createAccount(Account account, Credentials credentials) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             try {
                 accountDao.create(account, conn);
@@ -54,26 +58,26 @@ public class AccountService {
                 return account;
             } catch (SQLException e) {
                 conn.rollback();
-                throw new RuntimeException(e);
+                throw new DatabaseQueryException("Could not create account", e);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error while creating account", e);
+            throw new DatabaseQueryException("Could not create account", e);
         }
     }
 
-    public void updateAccount(long accountId, Account account) {
+    public void updateAccount(long accountId, Account account) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             accountDao.update(accountId, account, conn);
-        } catch (Exception e) {
-            throw new RuntimeException("Error while updating account", e);
+        } catch (SQLException e) {
+            throw new DatabaseQueryException("Error while updating account", e);
         }
     }
 
-    public void deleteAccount(long accountId) {
+    public void deleteAccount(long accountId) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             accountDao.delete(accountId, conn);
-        } catch (Exception e) {
-            throw new RuntimeException("Error while deleting account", e);
+        } catch (SQLException e) {
+            throw new DatabaseQueryException("Error while deleting account", e);
         }
     }
 }

@@ -3,6 +3,9 @@ package com.feis.eduhub.backend.features.auth;
 import org.json.JSONObject;
 
 import com.feis.eduhub.backend.common.dto.ResponseDto;
+import com.feis.eduhub.backend.common.exceptions.AppException;
+import com.feis.eduhub.backend.common.exceptions.InvalidCredentialsException;
+import com.feis.eduhub.backend.common.exceptions.ValidationException;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
 import com.feis.eduhub.backend.common.lib.Hashing;
 import com.feis.eduhub.backend.features.account.Account;
@@ -39,7 +42,7 @@ public class AuthController implements EndpointsRegister {
     private final Handler signupHandler = (ctx) -> {
         JSONObject json = new JSONObject(ctx.body());
         if (json.isEmpty()) {
-            throw new RuntimeException("No values provided.");
+            throw new ValidationException("No values provided.");
         }
         // TODO: Add data validation
         UserDto user = createAccount(json);
@@ -53,7 +56,7 @@ public class AuthController implements EndpointsRegister {
     private final Handler loginHandler = (ctx) -> {
         JSONObject json = new JSONObject(ctx.body());
         if (json.isEmpty()) {
-            throw new RuntimeException("No values provided.");
+            throw new ValidationException("No values provided.");
         }
         Credentials storedCredentials = checkCredentials(json);
         JwtData jwtData = setJwt(storedCredentials, json.optBoolean("rememberMe"));
@@ -61,7 +64,7 @@ public class AuthController implements EndpointsRegister {
         ctx.status(200).result("Authenticated");
     };
 
-    private UserDto createAccount(JSONObject json) {
+    private UserDto createAccount(JSONObject json) throws AppException {
         Account account = getAccountData(json);
         Credentials credentials = getCredentialsData(json);
         accountService.createAccount(account, credentials);
@@ -89,16 +92,16 @@ public class AuthController implements EndpointsRegister {
                 credentials.getEmail(), account.getIcon(), account.getRoleId());
     }
 
-    private Credentials checkCredentials(JSONObject json) {
+    private Credentials checkCredentials(JSONObject json) throws AppException {
         Credentials credentials = getCredentialsData(json);
         Credentials storedCredentials = checkIsPasswordMatching(credentials);
         return storedCredentials;
     }
 
-    private Credentials checkIsPasswordMatching(Credentials credentials) {
+    private Credentials checkIsPasswordMatching(Credentials credentials) throws AppException {
         Credentials storedCredentials = credentialsService.getCredentialsByEmail(credentials.getEmail());
         if (!Hashing.verify(credentials.getPassword(), storedCredentials.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new InvalidCredentialsException("Invalid credentials");
         }
         return storedCredentials;
     }
