@@ -38,11 +38,11 @@ public class JsonWebToken {
     /**
      * Generates a JWT using HMAC256 as token signing algorithm.
      * 
-     * @param accountId     the account_id making the request (possibly obtained
-     *                      from the database)
-     * @param setExpiration se this to {@code true} if you want to disable the token
-     *                      expiration and make it last "forever" (not recommended),
-     *                      otherwise {@code false}
+     * @param accountId  the account_id making the request (possibly obtained
+     *                   from the database)
+     * @param rememberMe se this to {@code true} if you want to disable the token
+     *                   expiration and make it last "forever" (not recommended),
+     *                   otherwise {@code false}
      * @return an {@link com.feis.eduhub.backend.common.auth.lib.JwtData JWTData}
      *         Object representing the most useful token information.
      * @throws JWTCreationException if the claims could not be converted to a valid
@@ -52,18 +52,17 @@ public class JsonWebToken {
      * @see Builder
      * @see JwtData
      */
-    public static JwtData generateToken(long accountId, boolean setExpiration)
+    public static JwtData generateToken(long accountId, boolean rememberMe)
             throws JWTCreationException {
 
         String jti = UUID.randomUUID().toString();
         Instant exp = null;
 
-        // FIXME: Wrong expiration being set if `setExpiration` is false
         Builder jwtBuilder = JWT.create()
                 .withClaim("acc_id", accountId)
                 .withIssuedAt(new Date())
                 .withJWTId(jti);
-        if (setExpiration) {
+        if (!rememberMe) {
             exp = Instant.now().plusSeconds(DEFAULT_EXPIRATION_TIME);
             jwtBuilder.withExpiresAt(exp);
         }
