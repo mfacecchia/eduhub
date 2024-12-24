@@ -78,11 +78,12 @@ public class JsonWebToken {
      * Decodes a JWT using HMAC256 as token verification algorithm.
      * 
      * @param token the token to verificate
-     * @return the {@code JTI} claim (if the verification succeeds)
+     * @return a {@code JwtData} Object (if the verification succeeds)
      * @throws JWTVerificationException if any of the verification steps fail
      */
-    public static String validateToken(String token) throws JWTVerificationException {
+    public static JwtData validateToken(String token) throws JWTVerificationException {
         DecodedJWT jwt = verifier.verify(token);
-        return jwt.getId();
+        return new JwtData(jwt.getToken(), jwt.getClaim("acc_id").asLong(),
+                jwt.getId(), jwt.getExpiresAtAsInstant().getEpochSecond());
     }
 }
