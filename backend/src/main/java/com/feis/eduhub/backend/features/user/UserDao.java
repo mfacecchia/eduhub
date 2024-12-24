@@ -32,6 +32,17 @@ public class UserDao implements Dao<UserDto> {
         return Optional.empty();
     }
 
+    public Optional<UserDto> findByEmail(String email, Connection conn) throws SQLException {
+        String query = String.format("SELECT * FROM account %s WHERE email = ?", DATABASE_FIELDS, JOIN_QUERIES);
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(email));
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return Optional.of(getTableData(rs));
+        }
+        return Optional.empty();
+    }
+
     @Override
     public List<UserDto> getAll(Connection conn) throws SQLException {
         List<UserDto> usersList = new ArrayList<>();
