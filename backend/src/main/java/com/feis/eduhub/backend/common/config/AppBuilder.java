@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.feis.eduhub.backend.common.dto.ResponseDto;
+import com.feis.eduhub.backend.common.exceptions.AppException;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
 
 import io.javalin.Javalin;
@@ -67,6 +68,7 @@ public class AppBuilder {
             addTestEndpoint();
         }
         setEndpointNotFoundHandler();
+        setCustomAppExceptionsHandler();
         setAppGenericExceptionsHandler();
         logger.info("Done");
     }
@@ -107,6 +109,31 @@ public class AppBuilder {
     }
 
     /**
+     * Adds specific {@code AppException}s handling with a custom HTTP response and
+     * message.
+     * Sets a JSON-serialized response using
+     * {@link com.feis.eduhub.backend.common.dto.ResponseDto Response}
+     * DTO class
+     * 
+     * @see AppException
+     * @see ResponseDto
+     * @see ExceptionHandler
+     */
+    private void setCustomAppExceptionsHandler() {
+        app.exception(AppException.class, (e, ctx) -> {
+            final int STATUS_CODE = e.getStatusCode();
+            logger.info("------");
+            logger.info("[INFO]");
+            logger.info("------");
+            logger.info("Custom exception thrown during execution: ", e);
+            ResponseDto response = new ResponseDto.ResponseBuilder<>(STATUS_CODE)
+                    .withMessage(e.getMessage())
+                    .build();
+            ctx.status(STATUS_CODE).json(response);
+        });
+    }
+
+    /**
      * Adds generic {@code Exception}s handling with a 400 BAD REQUEST HTTP response
      * using {@link com.feis.eduhub.backend.common.dto.ResponseDto Response} format.
      * 
@@ -119,7 +146,7 @@ public class AppBuilder {
             logger.info("------");
             logger.info("[INFO]");
             logger.info("------");
-            logger.info("Exception thrown during execution: ", e);
+            logger.info("Unexpected Exception thrown during execution: ", e);
             ResponseDto response = new ResponseDto.ResponseBuilder<>(STATUS_CODE)
                     .withMessage("An unexpected error occurred. Please try again later.")
                     .build();
