@@ -3,6 +3,7 @@ package com.feis.eduhub.backend.features.account;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.feis.eduhub.backend.common.config.DatabaseConnection;
 import com.feis.eduhub.backend.features.credentials.Credentials;
@@ -24,6 +25,16 @@ public class AccountService {
     private final CredentialsDao credentialsDao = new CredentialsDao();
     private final CredentialsService credentialsService = new CredentialsService();
     private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+
+    public Account getAccountById(long id) {
+        try (Connection conn = databaseConnection.getConnection()) {
+            return accountDao.findById(id, conn).get();
+        } catch (NoSuchElementException e) {
+            throw new RuntimeException("Account not found", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not fetch data", e);
+        }
+    }
 
     public List<Account> getAllAccounts() {
         try (Connection conn = databaseConnection.getConnection()) {
