@@ -25,7 +25,7 @@ CREATE TABLE account (
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
     icon VARCHAR(100),
-    role_id INT NOT NULL
+    role_id BIGINT NOT NULL
 );
 
 CREATE TABLE credentials (
@@ -33,13 +33,13 @@ CREATE TABLE credentials (
     email VARCHAR(40) NOT NULL UNIQUE,
     password VARCHAR(256) NOT NULL,
     updated_at BIGINT NOT NULL,
-    account_id INT NOT NULL UNIQUE
+    account_id BIGINT NOT NULL UNIQUE
 );
 
 CREATE TABLE notice (
     notice_id BIGSERIAL PRIMARY KEY,
     notice_message VARCHAR(200) NOT NULL,
-    account_id INT
+    account_id BIGINT
 );
 
 CREATE TABLE logged_device (
@@ -48,7 +48,7 @@ CREATE TABLE logged_device (
     first_login TIMESTAMPTZ(0) NOT NULL,
     browser_name VARCHAR(30) NOT NULL,
     token_id UUID NOT NULL,
-    account_id INT NOT NULL
+    account_id BIGINT NOT NULL
 );
 
 CREATE TABLE lesson (
@@ -57,8 +57,8 @@ CREATE TABLE lesson (
     starts_at TIME NOT NULL,
     ends_at TIME NOT NULL,
     room_no INT NOT NULL,
-    account_id INT NOT NULL,
-    class_id INT NOT NULL
+    account_id BIGINT NOT NULL,
+    class_id BIGINT NOT NULL
 );
 
 CREATE TABLE system_class (
@@ -66,7 +66,7 @@ CREATE TABLE system_class (
     course_name VARCHAR(30) NOT NULL,
     class_address VARCHAR(30) NOT NULL,
     class_year INT NOT NULL,
-    teacher_id INT
+    teacher_id BIGINT
 );
 
 CREATE TABLE account_class (
@@ -75,38 +75,38 @@ CREATE TABLE account_class (
 );
 
 CREATE TABLE lesson_attendance (
-    account_id INT NOT NULL,
-    lesson_id INT NOT NULL,
-    attended BOOLEAN NOT NULL DEFAULT true
+    account_id BIGINT NOT NULL,
+    lesson_id BIGINT NOT NULL,
+    attended BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE quiz (
     quiz_id BIGSERIAL PRIMARY KEY,
     title VARCHAR(40) NOT NULL,
-    class_id INT NOT NULL
+    class_id BIGINT NOT NULL
 );
 
 CREATE TABLE question (
     question_id BIGSERIAL PRIMARY KEY,
     question_label VARCHAR(500) NOT NULL,
-    quiz_id INT NOT NULL
+    quiz_id BIGINT NOT NULL
 );
 
 CREATE TABLE answer (
     answer_id BIGSERIAL PRIMARY KEY,
     answer_label VARCHAR(100) NOT NULL,
     is_correct BOOLEAN NOT NULL DEFAULT false,
-    question_id INT NOT NULL
+    question_id BIGINT NOT NULL
 );
 
 CREATE TABLE account_quiz_answer (
-    account_id INT NOT NULL,
-    answer_id INT NOT NULL
+    account_id BIGINT NOT NULL,
+    answer_id BIGINT NOT NULL
 );
 
 CREATE TABLE account_text_answer (
-    account_id INT NOT NULL,
-    quiz_id INT NOT NULL,
+    account_id BIGINT NOT NULL,
+    quiz_id BIGINT NOT NULL,
     answer_text VARCHAR(500) NOT NULL
 );
 
