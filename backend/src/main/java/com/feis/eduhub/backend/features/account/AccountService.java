@@ -7,6 +7,7 @@ import java.util.List;
 import com.feis.eduhub.backend.common.config.DatabaseConnection;
 import com.feis.eduhub.backend.features.credentials.Credentials;
 import com.feis.eduhub.backend.features.credentials.CredentialsDao;
+import com.feis.eduhub.backend.features.credentials.CredentialsService;
 
 /**
  * Service class responsible for managing account-related operations such as
@@ -21,6 +22,7 @@ import com.feis.eduhub.backend.features.credentials.CredentialsDao;
 public class AccountService {
     private final AccountDao accountDao = new AccountDao();
     private final CredentialsDao credentialsDao = new CredentialsDao();
+    private final CredentialsService credentialsService = new CredentialsService();
     private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
 
     public List<Account> getAllAccounts() {
@@ -35,7 +37,7 @@ public class AccountService {
         try (Connection conn = databaseConnection.getConnection()) {
             try {
                 accountDao.create(account, conn);
-                updateCredentialData(credentials, account);
+                credentialsService.updateCredentialsData(credentials, account);
                 credentialsDao.create(credentials, conn);
                 conn.commit();
                 return account;
@@ -62,12 +64,5 @@ public class AccountService {
         } catch (Exception e) {
             throw new RuntimeException("Error while deleting account", e);
         }
-    }
-
-    private void updateCredentialData(Credentials credentials, Account account) {
-        if (account.getAccountId() <= 0) {
-            throw new IllegalStateException("accountId cannot be lower than 1");
-        }
-        credentials.setAccountId(account.getAccountId());
     }
 }
