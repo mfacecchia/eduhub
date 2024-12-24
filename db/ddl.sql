@@ -39,7 +39,7 @@ CREATE TABLE credentials (
 CREATE TABLE notice (
     notice_id BIGSERIAL PRIMARY KEY,
     notice_message VARCHAR(200) NOT NULL,
-    account_id BIGINT
+    account_id BIGINT NOT NULL
 );
 
 CREATE TABLE logged_device (
@@ -57,7 +57,7 @@ CREATE TABLE lesson (
     starts_at TIME NOT NULL,
     ends_at TIME NOT NULL,
     room_no INT NOT NULL,
-    account_id BIGINT NOT NULL,
+    account_id BIGINT,
     class_id BIGINT NOT NULL
 );
 
@@ -130,7 +130,7 @@ FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE;
 
 ALTER TABLE lesson
 ADD CONSTRAINT fk_lesson_account
-FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE,
+FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE SET NULL,
 ADD CONSTRAINT fk_lesson_class
 FOREIGN KEY (class_id) REFERENCES system_class(class_id) ON DELETE CASCADE;
 
