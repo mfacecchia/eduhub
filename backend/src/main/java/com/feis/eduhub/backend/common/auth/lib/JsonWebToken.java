@@ -30,8 +30,8 @@ import com.feis.eduhub.backend.common.lib.Environment;
 public class JsonWebToken {
     private final static Map<String, String> configValues = Environment
             .getEnvironmentVariables(Arrays.asList("JWT_SECRET"));
-    // NOTE: 1 months
-    private static final long DEFAULT_EXPIRATION_TIME = 60 * 1000 * 60 * 24 * 30 * 6;
+    // NOTE: 6 months
+    private static final long DEFAULT_EXPIRATION_TIME = 60L * 60 * 24 * 30 * 6;
     private static final Algorithm ALGORITHM = Algorithm.HMAC256(configValues.get("JWT_SECRET"));
     private static final JWTVerifier verifier = JWT.require(ALGORITHM).build();
 
