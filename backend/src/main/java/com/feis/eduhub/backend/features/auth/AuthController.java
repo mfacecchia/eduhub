@@ -26,8 +26,12 @@ public class AuthController implements EndpointsRegister {
     private final CredentialsService credentialsService = new CredentialsService();
     private final JwtService jwtService = new JwtService();
 
+    private final AuthMiddleware authMiddleware = new AuthMiddleware();
+
     @Override
     public void registerEndpoints(Javalin app) {
+        app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/*",
+                authMiddleware.isLoggedIn(false, true, false));
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/login", loginHandler);
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/signup", signupHandler);
     }
