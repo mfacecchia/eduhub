@@ -3,6 +3,7 @@ package com.feis.eduhub.backend.features.credentials;
 import java.sql.Connection;
 import java.time.Instant;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.feis.eduhub.backend.common.config.DatabaseConnection;
 import com.feis.eduhub.backend.common.lib.Hashing;
@@ -20,6 +21,26 @@ import com.feis.eduhub.backend.features.account.Account;
 public class CredentialsService {
     private final CredentialsDao credentialsDao = new CredentialsDao();
     private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+
+    public Credentials getCredentialsById(long id) {
+        try (Connection conn = databaseConnection.getConnection()) {
+            return credentialsDao.findById(id, conn).orElseGet(null);
+        } catch (NoSuchElementException e) {
+            throw new RuntimeException("Credentials not found", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not fetch data", e);
+        }
+    }
+
+    public Credentials getCredentialsByEmail(String email) {
+        try (Connection conn = databaseConnection.getConnection()) {
+            return credentialsDao.findByEmail(email, conn).get();
+        } catch (NoSuchElementException e) {
+            throw new RuntimeException("Credentials not found", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not fetch data", e);
+        }
+    }
 
     public List<Credentials> getAllCredentials() {
         try (Connection conn = databaseConnection.getConnection()) {
