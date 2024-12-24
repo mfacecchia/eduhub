@@ -58,6 +58,7 @@ public class JsonWebToken {
         String jti = UUID.randomUUID().toString();
         Instant exp = null;
 
+        // FIXME: Wrong expiration being set if `setExpiration` is false
         Builder jwtBuilder = JWT.create()
                 .withClaim("acc_id", accountId)
                 .withIssuedAt(new Date())
@@ -68,9 +69,9 @@ public class JsonWebToken {
         }
         String token = jwtBuilder.sign(ALGORITHM);
         return new JwtData(
-                jti,
-                accountId,
                 token,
+                accountId,
+                jti,
                 exp != null ? exp.getEpochSecond() : -1);
     }
 
