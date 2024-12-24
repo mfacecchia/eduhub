@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.util.List;
 
 import com.feis.eduhub.backend.common.config.DatabaseConnection;
+import com.feis.eduhub.backend.common.lib.Hashing;
+import com.feis.eduhub.backend.features.account.Account;
 
 /**
  * Service class responsible for managing credentials-related operations such as
@@ -55,6 +57,37 @@ public class CredentialsService {
         } catch (Exception e) {
             throw new RuntimeException("Error while deleting credentials", e);
         }
+    }
+
+    /**
+     * Executes some operations on the credentials before passing them to the DAO
+     * layer.
+     * Some of the operations are assigning them to an {@code accountId}, hashing
+     * the password by using a {@link com.feis.eduhub.backend.common.lib.Hashing
+     * Hashing utility} (Argon2id algo) and setting the last updated time to current
+     * time (in seconds unit)
+     * 
+     * @param credentials the credentials object to update
+     * @param account     the account from which retrieve all needed information
+     * 
+     * @throws IllegalStateException if the passed accountId is invalid (lower than
+     *                               1)
+     * 
+     * @see Account
+     * @see Hashing
+     */
+    public void updateCredentialsData(Credentials credentials, Account account) {
+        if (account.getAccountId() <= 0) {
+            throw new IllegalStateException("accountId cannot be lower than 1");
+        }
+        credentials.setAccountId(account.getAccountId());
+        hashPassword(credentials);
+        setUpdatedAtTime(credentials);
+    }
+
+    private void hashPassword(Credentials credentials) {
+        String hash = Hashing.hash(credentials.getPassword());
+        credentials.setPassword(hash);
     }
 
     /**
