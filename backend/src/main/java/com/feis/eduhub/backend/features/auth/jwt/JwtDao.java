@@ -1,4 +1,4 @@
-package com.feis.eduhub.backend.common.auth.lib;
+package com.feis.eduhub.backend.features.auth.jwt;
 
 import com.feis.eduhub.backend.common.interfaces.dao.RedisDao;
 

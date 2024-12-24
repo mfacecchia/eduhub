@@ -1,4 +1,4 @@
-package com.feis.eduhub.backend.common.auth.lib;
+package com.feis.eduhub.backend.features.auth.jwt;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -43,7 +43,7 @@ public class JsonWebToken {
      * @param rememberMe se this to {@code true} if you want to disable the token
      *                   expiration and make it last "forever" (not recommended),
      *                   otherwise {@code false}
-     * @return an {@link com.feis.eduhub.backend.common.auth.lib.JwtData JWTData}
+     * @return an {@link com.feis.eduhub.backend.features.auth.jwt.JwtData JWTData}
      *         Object representing the most useful token information.
      * @throws JWTCreationException if the claims could not be converted to a valid
      *                              JSON or there was a problem with the signing

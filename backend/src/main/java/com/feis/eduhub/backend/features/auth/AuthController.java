@@ -1,15 +1,15 @@
-package com.feis.eduhub.backend.common.auth.controller;
+package com.feis.eduhub.backend.features.auth;
 
 import org.json.JSONObject;
 
-import com.feis.eduhub.backend.common.auth.lib.JsonWebToken;
-import com.feis.eduhub.backend.common.auth.lib.JwtData;
-import com.feis.eduhub.backend.common.auth.lib.JwtService;
 import com.feis.eduhub.backend.common.dto.ResponseDto;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
 import com.feis.eduhub.backend.common.lib.Hashing;
 import com.feis.eduhub.backend.features.account.Account;
 import com.feis.eduhub.backend.features.account.AccountService;
+import com.feis.eduhub.backend.features.auth.jwt.JsonWebToken;
+import com.feis.eduhub.backend.features.auth.jwt.JwtData;
+import com.feis.eduhub.backend.features.auth.jwt.JwtService;
 import com.feis.eduhub.backend.features.credentials.Credentials;
 import com.feis.eduhub.backend.features.credentials.CredentialsService;
 import com.feis.eduhub.backend.features.user.UserDto;
