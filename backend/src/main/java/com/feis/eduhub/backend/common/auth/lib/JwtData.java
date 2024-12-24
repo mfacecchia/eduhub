@@ -51,7 +51,7 @@ public class JwtData {
      *          years period time in seconds unit)
      */
     public int getExpIntDuration() {
-        Duration duration = Duration.between(Instant.EPOCH, Instant.ofEpochSecond(exp));
+        Duration duration = Duration.between(Instant.now(), Instant.ofEpochSecond(exp));
         return Long.valueOf(duration.getSeconds()).intValue();
     }
 
@@ -62,7 +62,7 @@ public class JwtData {
      *         as a {@code long} value
      */
     public long getExpLongDuration() {
-        Duration duration = Duration.between(Instant.EPOCH, Instant.ofEpochSecond(exp));
+        Duration duration = Duration.between(Instant.now(), Instant.ofEpochSecond(exp));
         return duration.getSeconds();
     }
 
