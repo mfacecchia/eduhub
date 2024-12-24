@@ -2,22 +2,33 @@ package com.feis.eduhub.backend.common.auth.controller;
 
 import org.json.JSONObject;
 
+import com.feis.eduhub.backend.common.auth.lib.JsonWebToken;
+import com.feis.eduhub.backend.common.auth.lib.JwtData;
+import com.feis.eduhub.backend.common.auth.lib.JwtService;
 import com.feis.eduhub.backend.common.dto.ResponseDto;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
+import com.feis.eduhub.backend.common.lib.Hashing;
 import com.feis.eduhub.backend.features.account.Account;
 import com.feis.eduhub.backend.features.account.AccountService;
 import com.feis.eduhub.backend.features.credentials.Credentials;
+import com.feis.eduhub.backend.features.credentials.CredentialsService;
 import com.feis.eduhub.backend.features.user.UserDto;
 
 import io.javalin.Javalin;
+import io.javalin.http.Context;
+import io.javalin.http.Cookie;
 import io.javalin.http.Handler;
+import io.javalin.http.SameSite;
 
 public class AuthController implements EndpointsRegister {
     private final String BASE_URL = "/auth";
     private final AccountService accountService = new AccountService();
+    private final CredentialsService credentialsService = new CredentialsService();
+    private final JwtService jwtService = new JwtService();
 
     @Override
     public void registerEndpoints(Javalin app) {
+        app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/login", loginHandler);
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/signup", signupHandler);
     }
 
@@ -33,6 +44,17 @@ public class AuthController implements EndpointsRegister {
                 .withData(user)
                 .build();
         ctx.status(200).json(response);
+    };
+
+    private final Handler loginHandler = (ctx) -> {
+        JSONObject json = new JSONObject(ctx.body());
+        if (json.isEmpty()) {
+            throw new RuntimeException("No values provided.");
+        }
+        Credentials storedCredentials = checkCredentials(json);
+        JwtData jwtData = setJwt(storedCredentials, json.optBoolean("rememberMe"));
+        setJwtCookie(ctx, jwtData);
+        ctx.status(200).result("Authenticated");
     };
 
     private UserDto createAccount(JSONObject json) {
@@ -61,5 +83,45 @@ public class AuthController implements EndpointsRegister {
     private UserDto generateUser(Account account, Credentials credentials) {
         return new UserDto(account.getAccountId(), account.getFirstName(), account.getLastName(),
                 credentials.getEmail(), account.getIcon(), account.getRoleId());
+    }
+
+    private Credentials checkCredentials(JSONObject json) {
+        Credentials credentials = getCredentialsData(json);
+        Credentials storedCredentials = checkIsPasswordMatching(credentials);
+        return storedCredentials;
+    }
+
+    private Credentials checkIsPasswordMatching(Credentials credentials) {
+        Credentials storedCredentials = credentialsService.getCredentialsByEmail(credentials.getEmail());
+        if (!Hashing.verify(credentials.getPassword(), storedCredentials.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+        return storedCredentials;
+    }
+
+    private JwtData setJwt(Credentials credentials, boolean rememberMe) {
+        JwtData jwtData = generateJwt(credentials, rememberMe);
+        storeToken(jwtData);
+        return jwtData;
+    }
+
+    private void storeToken(JwtData jwtData) {
+        jwtService.storeJwt(jwtData.getJti(),
+                String.valueOf(jwtData.getAccountId()),
+                jwtData.getExp());
+    }
+
+    private void setJwtCookie(Context ctx, JwtData jwtData) {
+        Cookie jwtCookie = new Cookie("sessionId", jwtData.getToken(), "/",
+                jwtData.getExpIntDuration(),
+                true, 0, true, "", "", SameSite.NONE);
+        ctx.cookie(jwtCookie);
+    }
+
+    private JwtData generateJwt(Credentials credentials, boolean rememberMe) {
+        if (credentials == null || credentials.getAccountId() <= 0) {
+            throw new IllegalStateException("Credentials object is null or account id is lower than 1");
+        }
+        return JsonWebToken.generateToken(credentials.getAccountId(), rememberMe);
     }
 }
