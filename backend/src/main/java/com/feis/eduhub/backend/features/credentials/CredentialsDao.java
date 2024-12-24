@@ -28,6 +28,17 @@ public class CredentialsDao implements ModelDao<Credentials> {
         return Optional.empty();
     }
 
+    public Optional<Credentials> findByEmail(String email, Connection conn) throws SQLException {
+        String query = String.format("SELECT * FROM \"%s\" WHERE email = ?", TABLE_NAME);
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(email));
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return Optional.of(getTableData(rs));
+        }
+        return Optional.empty();
+    }
+
     @Override
     public List<Credentials> getAll(Connection conn) throws SQLException {
         List<Credentials> credentialsList = new ArrayList<>();
