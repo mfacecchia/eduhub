@@ -1,5 +1,8 @@
 package com.feis.eduhub.backend.common.auth.lib;
 
+import java.time.Duration;
+import java.time.Instant;
+
 /**
  * A data class representing the most useful JWT information
  * such as the JWT token itself, its unique identifier (JTI),
@@ -27,6 +30,34 @@ public class JwtData {
         this.token = token;
         this.jti = jti;
         this.exp = exp;
+    }
+
+    /**
+     * Calculates the total token TTL in seconds
+     * 
+     * @return the operation result in seconds
+     *         as an {@code int} value
+     * 
+     * @apiNote since this method returns the duration as an integer, there could
+     *          be chances that the result will run into data loss or unexpected
+     *          behavior if the result exceeds int max possible value
+     *          ({@code int} data can, by intentional design, store roughly a 68
+     *          years period time in seconds unit)
+     */
+    public int getExpIntDuration() {
+        Duration duration = Duration.between(Instant.EPOCH, Instant.ofEpochSecond(exp));
+        return Long.valueOf(duration.getSeconds()).intValue();
+    }
+
+    /**
+     * Calculates the total token TTL in seconds
+     * 
+     * @return the operation result in seconds
+     *         as a {@code long} value
+     */
+    public long getExpLongDuration() {
+        Duration duration = Duration.between(Instant.EPOCH, Instant.ofEpochSecond(exp));
+        return duration.getSeconds();
     }
 
     public String getToken() {
