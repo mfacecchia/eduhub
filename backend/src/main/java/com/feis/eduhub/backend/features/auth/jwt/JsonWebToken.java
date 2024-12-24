@@ -84,6 +84,6 @@ public class JsonWebToken {
     public static JwtData validateToken(String token) throws JWTVerificationException {
         DecodedJWT jwt = verifier.verify(token);
         return new JwtData(jwt.getToken(), jwt.getClaim("acc_id").asLong(),
-                jwt.getId(), jwt.getExpiresAtAsInstant().getEpochSecond());
+                jwt.getId(), jwt.getExpiresAtAsInstant() != null ? jwt.getExpiresAtAsInstant().getEpochSecond() : -1);
     }
 }
