@@ -69,6 +69,7 @@ public class JsonWebToken {
         String token = jwtBuilder.sign(ALGORITHM);
         return new JwtData(
                 jti,
+                accountId,
                 token,
                 exp != null ? exp.getEpochSecond() : -1);
     }
