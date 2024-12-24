@@ -94,6 +94,6 @@ INSERT INTO account_quiz_answer (account_id, answer_id) VALUES
     (5, 5);
 
 INSERT INTO notice (notice_message, account_id) VALUES
-    ('Welcome to the new semester!', null),
+    ('Welcome to the new semester!', 1),
     ('Your Math homework is due tomorrow', 4),
     ('Class canceled for tomorrow', 5);
