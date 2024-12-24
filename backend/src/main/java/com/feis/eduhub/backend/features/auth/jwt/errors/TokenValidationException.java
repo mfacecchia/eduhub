@@ -1,4 +1,6 @@
-package com.feis.eduhub.backend.common.exceptions;
+package com.feis.eduhub.backend.features.auth.jwt.errors;
+
+import com.feis.eduhub.backend.common.exceptions.AppException;
 
 /**
  * Exception thrown when token validation fails (e.g. expired token)
