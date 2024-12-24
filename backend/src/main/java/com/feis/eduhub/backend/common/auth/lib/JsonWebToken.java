@@ -1,5 +1,6 @@
 package com.feis.eduhub.backend.common.auth.lib;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -42,24 +43,34 @@ public class JsonWebToken {
      * @param setExpiration se this to {@code true} if you want to disable the token
      *                      expiration and make it last "forever" (not recommended),
      *                      otherwise {@code false}
-     * @return the generated token in form of String
+     * @return an {@link com.feis.eduhub.backend.common.auth.lib.JwtData JWTData}
+     *         Object representing the most useful token information.
      * @throws JWTCreationException if the claims could not be converted to a valid
      *                              JSON or there was a problem with the signing
      *                              key.
      * 
      * @see Builder
+     * @see JwtData
      */
-    public static String generateToken(long accountId, boolean setExpiration)
+    public static JwtData generateToken(long accountId, boolean setExpiration)
             throws JWTCreationException {
+
+        String jti = UUID.randomUUID().toString();
+        Instant exp = null;
 
         Builder jwtBuilder = JWT.create()
                 .withClaim("acc_id", accountId)
                 .withIssuedAt(new Date())
-                .withJWTId(UUID.randomUUID().toString());
+                .withJWTId(jti);
         if (setExpiration) {
-            jwtBuilder.withExpiresAt(new Date(System.currentTimeMillis() + DEFAULT_EXPIRATION_TIME));
+            exp = Instant.now().plusSeconds(DEFAULT_EXPIRATION_TIME);
+            jwtBuilder.withExpiresAt(exp);
         }
-        return jwtBuilder.sign(ALGORITHM);
+        String token = jwtBuilder.sign(ALGORITHM);
+        return new JwtData(
+                jti,
+                token,
+                exp != null ? exp.getEpochSecond() : -1);
     }
 
     /**
