@@ -59,6 +59,7 @@ public class AppBuilder {
      *                        othwewise {@code false}
      */
     public void configureEndpoints(boolean addTestEndpoint) {
+        logger.info("Registering app endpoints");
         if (appControllers != null) {
             setAppEndpoints();
         }
@@ -67,6 +68,7 @@ public class AppBuilder {
         }
         setEndpointNotFoundHandler();
         setAppGenericExceptionsHandler();
+        logger.info("Done");
     }
 
     private void setAppEndpoints() {
@@ -114,6 +116,9 @@ public class AppBuilder {
     private void setAppGenericExceptionsHandler() {
         app.exception(Exception.class, (e, ctx) -> {
             final int STATUS_CODE = 400;
+            logger.info("------");
+            logger.info("[INFO]");
+            logger.info("------");
             logger.info("Exception thrown during execution: ", e);
             ResponseDto response = new ResponseDto.ResponseBuilder<>(STATUS_CODE)
                     .withMessage("An unexpected error occurred. Please try again later.")
