@@ -9,11 +9,12 @@ import lombok.NonNull;
 @NoArgsConstructor
 @Data
 public class Role {
-    private long roleId;
+    @NonNull
+    private Long roleId;
     @NonNull
     private String roleName;
 
-    public Role(String roleName) {
+    public Role(@NonNull String roleName) {
         this.roleName = roleName;
     }
 }

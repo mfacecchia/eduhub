@@ -9,21 +9,25 @@ import lombok.NonNull;
 @NoArgsConstructor
 @Data
 public class Account {
-    private long accountId;
+    @NonNull
+    private Long accountId;
     @NonNull
     private String firstName;
     @NonNull
     private String lastName;
     private String icon;
-    private long roleId;
+    @NonNull
+    private Long roleId;
 
-    public Account(String firstName, String lastName, long roleId) {
+    // NOTE: DB NOT NULL fields constructor
+    public Account(@NonNull String firstName, @NonNull String lastName, @NonNull Long roleId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.roleId = roleId;
     }
 
-    public Account(String firstName, String lastName, String icon, long roleId) {
+    // NOTE: All fields except auto-incremental ID constructor
+    public Account(@NonNull String firstName, @NonNull String lastName, String icon, @NonNull Long roleId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.icon = icon;
