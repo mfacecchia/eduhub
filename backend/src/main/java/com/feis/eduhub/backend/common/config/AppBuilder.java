@@ -101,7 +101,7 @@ public class AppBuilder {
             final int STATUS_CODE = 404;
             logger.info("Endpoint {} with {} method not found!",
                     ctx.path(), ctx.method());
-            ResponseDto response = new ResponseDto.ResponseBuilder<>(STATUS_CODE)
+            ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(STATUS_CODE)
                     .withMessage(String.format("Endpoint %s with %s method not found", ctx.path(), ctx.method()))
                     .build();
             ctx.status(STATUS_CODE).json(response);
@@ -122,11 +122,12 @@ public class AppBuilder {
     private void setCustomAppExceptionsHandler() {
         app.exception(AppException.class, (e, ctx) -> {
             final int STATUS_CODE = e.getStatusCode();
+            // TODO: Move logging to a more specific class
             logger.info("------");
             logger.info("[INFO]");
             logger.info("------");
             logger.info("Custom exception thrown during execution: ", e);
-            ResponseDto response = new ResponseDto.ResponseBuilder<>(STATUS_CODE)
+            ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(STATUS_CODE)
                     .withMessage(e.getMessage())
                     .build();
             ctx.status(STATUS_CODE).json(response);
@@ -147,7 +148,7 @@ public class AppBuilder {
             logger.info("[INFO]");
             logger.info("------");
             logger.info("Unexpected Exception thrown during execution: ", e);
-            ResponseDto response = new ResponseDto.ResponseBuilder<>(STATUS_CODE)
+            ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(STATUS_CODE)
                     .withMessage("An unexpected error occurred. Please try again later.")
                     .build();
             ctx.status(STATUS_CODE).json(response);
