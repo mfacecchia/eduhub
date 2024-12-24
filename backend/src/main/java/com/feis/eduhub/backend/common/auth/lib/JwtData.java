@@ -5,29 +5,35 @@ import java.time.Instant;
 
 /**
  * A data class representing the most useful JWT information
- * such as the JWT token itself, its unique identifier (JTI),
- * and expiration time claims (represented in JWT's EPOCH Seconds time unit).
+ * such as the JWT token itself, its unique identifier (JTI), associated
+ * {@link com.feis.eduhub.backend.features.account.Account Account's} acocuntId,
+ * and expiration time claims (represented in JWT's EPOCH Seconds
+ * time unit).
  */
 public class JwtData {
     private final String token;
+    private final long accountId;
     private final String jti;
     private final long exp;
 
     /**
      * Builds the JWT Data Object.
      * 
-     * @param token the JWT itself
-     * @param jti   the token ID
-     * @param exp   the expiry time in EPOCH seconds (if set to a negative value
-     *              then no expiry is set to the token)
+     * @param token     the JWT itself
+     * @param accountId the associated account's acocuntId
+     * @param jti       the token ID
+     * @param exp       the expiry time in EPOCH seconds (if set to a negative value
+     *                  then no expiry is set to the token)
      * 
-     * @throws IllegalArgumentException if the JWT or the JTI are blank
+     * @throws IllegalArgumentException if the passed values (representing JWT
+     *                                  claims) contain invalid values
      */
-    public JwtData(String token, String jti, long exp) {
-        if (token.isBlank() || jti.isBlank()) {
-            throw new IllegalArgumentException("Token or jti empty");
+    public JwtData(String token, long accountId, String jti, long exp) {
+        if (token.isBlank() || jti.isBlank() || accountId <= 0) {
+            throw new IllegalArgumentException("Invalid token claims");
         }
         this.token = token;
+        this.accountId = accountId;
         this.jti = jti;
         this.exp = exp;
     }
@@ -62,6 +68,10 @@ public class JwtData {
 
     public String getToken() {
         return token;
+    }
+
+    public long getAccountId() {
+        return accountId;
     }
 
     public String getJti() {
