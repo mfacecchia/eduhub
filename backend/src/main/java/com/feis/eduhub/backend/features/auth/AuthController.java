@@ -13,6 +13,7 @@ import com.feis.eduhub.backend.features.account.AccountService;
 import com.feis.eduhub.backend.features.auth.jwt.JsonWebToken;
 import com.feis.eduhub.backend.features.auth.jwt.JwtData;
 import com.feis.eduhub.backend.features.auth.jwt.JwtService;
+import com.feis.eduhub.backend.features.auth.jwt.errors.TokenGenerationException;
 import com.feis.eduhub.backend.features.credentials.Credentials;
 import com.feis.eduhub.backend.features.credentials.CredentialsService;
 import com.feis.eduhub.backend.features.user.UserDto;
@@ -106,7 +107,7 @@ public class AuthController implements EndpointsRegister {
         return storedCredentials;
     }
 
-    private JwtData setJwt(Credentials credentials, boolean rememberMe) {
+    private JwtData setJwt(Credentials credentials, boolean rememberMe) throws TokenGenerationException {
         JwtData jwtData = generateJwt(credentials, rememberMe);
         storeToken(jwtData);
         return jwtData;
@@ -125,7 +126,7 @@ public class AuthController implements EndpointsRegister {
         ctx.cookie(jwtCookie);
     }
 
-    private JwtData generateJwt(Credentials credentials, boolean rememberMe) {
+    private JwtData generateJwt(Credentials credentials, boolean rememberMe) throws TokenGenerationException {
         if (credentials == null || credentials.getAccountId() <= 0) {
             throw new IllegalStateException("Credentials object is null or account id is lower than 1");
         }
