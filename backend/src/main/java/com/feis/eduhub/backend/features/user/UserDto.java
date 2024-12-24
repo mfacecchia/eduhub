@@ -26,10 +26,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class UserDto {
-    private Long accountId;
+    private long accountId;
     private String firstName;
     private String lastName;
     private String email;
     private String icon;
     private String roleName;
+    private long roleId;
+
+    public UserDto(long accountId, String firstName, String lastName, String email, String icon, String roleName) {
+        this.accountId = accountId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.icon = icon;
+        this.roleName = roleName;
+    }
+
+    public UserDto(long accountId, String firstName, String lastName, String email, String icon, long roleId) {
+        this.accountId = accountId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.icon = icon;
+        this.roleId = roleId;
+    }
 }
