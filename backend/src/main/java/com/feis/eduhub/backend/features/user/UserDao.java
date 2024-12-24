@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.feis.eduhub.backend.common.interfaces.Dao;
+import com.feis.eduhub.backend.common.interfaces.dao.Dao;
 import com.feis.eduhub.backend.common.lib.Sql;
 
 public class UserDao implements Dao<UserDto> {
