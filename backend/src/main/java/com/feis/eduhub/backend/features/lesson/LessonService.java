@@ -25,7 +25,14 @@ public class LessonService {
         }
     }
 
-    // TODO: add get all lessons per userId and classId as wellg
+    public List<Lesson> getLessonByClassId(long id) throws AppException {
+        try (Connection conn = databaseConnection.getConnection()) {
+            return lessonDao.findByClassId(id, conn);
+        } catch (SQLException e) {
+            throw new DataFetchException("Could not fetch data", e);
+        }
+    }
+
     public List<Lesson> getAllLessons() throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             return lessonDao.getAll(conn);
