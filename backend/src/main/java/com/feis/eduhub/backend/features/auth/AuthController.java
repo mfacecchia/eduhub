@@ -72,9 +72,13 @@ public class AuthController implements EndpointsRegister {
         return generateUser(account, credentials);
     }
 
-    private Account getAccountData(JSONObject json) {
-        return new Account(json.getString("firstName"), json.getString("lastName"),
-                json.getLong("roleId"));
+    private Account getAccountData(JSONObject json) throws ValidationException {
+        try {
+            return new Account(json.optString("firstName", null), json.optString("lastName", null),
+                    json.optLongObject("roleId", null));
+        } catch (NullPointerException e) {
+            throw new ValidationException("Invalid values", e);
+        }
     }
 
     private Credentials getCredentialsData(JSONObject json) {
