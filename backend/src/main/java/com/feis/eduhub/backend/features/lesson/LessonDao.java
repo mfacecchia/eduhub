@@ -28,6 +28,18 @@ public class LessonDao implements ModelDao<Lesson> {
         return Optional.empty();
     }
 
+    public List<Lesson> findByClassId(long id, Connection conn) throws SQLException {
+        List<Lesson> lessonsList = new ArrayList<>();
+        String query = String.format("SELECT * FROM \"%s\" WHERE class_id = ?", TABLE_NAME);
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(id));
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            lessonsList.add(getTableData(rs));
+        }
+        return lessonsList;
+    }
+
     @Override
     public List<Lesson> getAll(Connection conn) throws SQLException {
         List<Lesson> lessonsList = new ArrayList<>();
