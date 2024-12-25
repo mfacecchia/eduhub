@@ -48,8 +48,8 @@ INSERT INTO credentials (email, password, updated_at, account_id) VALUES
     ('james.d@edu.com', '$argon2id$v=19$m=65536,t=4,p=4$JvdlFV4eSxQ5dGP0uxERIQ$7rqxJO+gCN3B1GWSHOYo1cL0Fg7fCnMlZqPFPPBQXBA', 1699570800, 5);
 
 INSERT INTO system_class (course_name, class_address, class_year, teacher_id) VALUES
-    ('Mathematics 101', 'Building A', 2023, 2),
-    ('Physics 101', 'Building B', 2023, 3);
+    ('Java', 'Software Development 2', 2023, 2),
+    ('JavaScript', 'Web Development 1', 2023, 3);
 
 INSERT INTO account_class (account_id, class_id) VALUES
     (4, 1),
