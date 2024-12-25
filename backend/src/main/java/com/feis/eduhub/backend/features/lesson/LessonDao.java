@@ -96,7 +96,7 @@ public class LessonDao implements ModelDao<Lesson> {
                     rs.getTime("starts_at"),
                     rs.getTime("ends_at"),
                     (Integer) rs.getObject("room_no"),
-                    (Long) rs.getObject("account_id"),
+                    (Long) rs.getObject("created_by_id"),
                     (Long) rs.getObject("class_id"));
         } catch (NullPointerException e) {
             throw new IllegalStateException("Illegal values found", e);
