@@ -63,8 +63,11 @@ CREATE TABLE lesson (
 
 CREATE TABLE system_class (
     class_id BIGSERIAL PRIMARY KEY,
+    -- E.g. "Java, React"
     course_name VARCHAR(30) NOT NULL,
+    -- E.g. "Software Development"
     class_address VARCHAR(30) NOT NULL,
+    -- E.g. 2023 --> 2023/2024
     class_year INT NOT NULL,
     teacher_id BIGINT
 );
