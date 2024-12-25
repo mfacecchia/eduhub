@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS account_class;
 DROP TABLE IF EXISTS lesson;
 DROP TABLE IF EXISTS system_class;
 DROP TABLE IF EXISTS logged_device;
-DROP TABLE IF EXISTS notice;
+DROP TABLE IF EXISTS system_notice;
 DROP TABLE IF EXISTS credentials;
 DROP TABLE IF EXISTS account;
 DROP TABLE IF EXISTS account_role;
@@ -36,7 +36,7 @@ CREATE TABLE credentials (
     account_id BIGINT NOT NULL UNIQUE
 );
 
-CREATE TABLE notice (
+CREATE TABLE system_notice (
     notice_id BIGSERIAL PRIMARY KEY,
     notice_message VARCHAR(200) NOT NULL,
     account_id BIGINT NOT NULL
@@ -57,7 +57,7 @@ CREATE TABLE lesson (
     starts_at TIME NOT NULL,
     ends_at TIME NOT NULL,
     room_no INT NOT NULL,
-    account_id BIGINT,
+    created_by_id BIGINT,
     class_id BIGINT NOT NULL
 );
 
@@ -123,8 +123,8 @@ ALTER TABLE credentials
 ADD CONSTRAINT fk_credentials_account
 FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE;
 
-ALTER TABLE notice
-ADD CONSTRAINT fk_notice_account
+ALTER TABLE system_notice
+ADD CONSTRAINT fk_system_notice_account
 FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE;
 
 ALTER TABLE logged_device
@@ -133,7 +133,7 @@ FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE;
 
 ALTER TABLE lesson
 ADD CONSTRAINT fk_lesson_account
-FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE SET NULL,
+FOREIGN KEY (created_by_id) REFERENCES account(account_id) ON DELETE SET NULL,
 ADD CONSTRAINT fk_lesson_class
 FOREIGN KEY (class_id) REFERENCES system_class(class_id) ON DELETE CASCADE;
 
