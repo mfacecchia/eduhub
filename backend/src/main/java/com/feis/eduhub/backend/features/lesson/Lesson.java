@@ -22,7 +22,7 @@ public class Lesson {
     private Time endsAt;
     @NonNull
     private Integer roomNo;
-    private Long accountId;
+    private Long createdById;
     @NonNull
     private Long classId;
 
@@ -36,12 +36,12 @@ public class Lesson {
     }
 
     public Lesson(@NonNull Date lessonDate, @NonNull Time startsAt, @NonNull Time endsAt, @NonNull Integer roomNo,
-            Long accountId, @NonNull Long classId) {
+            Long createdById, @NonNull Long classId) {
         this.lessonDate = lessonDate;
         this.startsAt = startsAt;
         this.endsAt = endsAt;
         this.roomNo = roomNo;
-        this.accountId = accountId;
+        this.createdById = createdById;
         this.classId = classId;
     }
 }
