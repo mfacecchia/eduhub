@@ -78,11 +78,15 @@ public class AccountDao implements ModelDao<Account> {
     }
 
     private Account getTableData(ResultSet rs) throws SQLException {
-        return new Account(
-                rs.getLong("account_id"),
-                rs.getString("first_name"),
-                rs.getString("last_name"),
-                rs.getString("icon"),
-                rs.getLong("role_id"));
+        try {
+            return new Account(
+                    (Long) rs.getObject("account_id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("icon"),
+                    (Long) rs.getObject("role_id"));
+        } catch (NullPointerException e) {
+            throw new IllegalStateException("Illegal values found", e);
+        }
     }
 }

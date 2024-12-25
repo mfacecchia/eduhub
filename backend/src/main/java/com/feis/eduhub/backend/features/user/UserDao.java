@@ -56,9 +56,12 @@ public class UserDao implements Dao<UserDto> {
     }
 
     private UserDto getTableData(ResultSet rs) throws SQLException {
-        return new UserDto(rs.getLong("account_id"),
-                rs.getString("first_name"), rs.getString("last_name"),
-                rs.getString("email"), rs.getString("icon"),
+        return new UserDto(
+                (Long) rs.getObject("account_id"),
+                rs.getString("first_name"),
+                rs.getString("last_name"),
+                rs.getString("email"),
+                rs.getString("icon"),
                 rs.getString("role_name"));
     }
 }

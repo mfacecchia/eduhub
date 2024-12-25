@@ -89,11 +89,15 @@ public class CredentialsDao implements ModelDao<Credentials> {
     }
 
     private Credentials getTableData(ResultSet rs) throws SQLException {
-        return new Credentials(
-                rs.getLong("credentials_id"),
-                rs.getString("email"),
-                rs.getString("password"),
-                rs.getInt("updated_at"),
-                rs.getLong("account_id"));
+        try {
+            return new Credentials(
+                    (Long) rs.getObject("credentials_id"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    (Long) rs.getObject("updated_at"),
+                    (Long) rs.getObject("account_id"));
+        } catch (NullPointerException e) {
+            throw new IllegalStateException("Illegal values found", e);
+        }
     }
 }
