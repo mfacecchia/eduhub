@@ -51,7 +51,7 @@ public class LessonService {
         }
     }
 
-    public void updateCredentials(long lessonId, Lesson lesson) throws AppException {
+    public void updateLesson(long lessonId, Lesson lesson) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             lessonDao.update(lessonId, lesson, conn);
             conn.commit();
