@@ -73,8 +73,8 @@ CREATE TABLE system_class (
 );
 
 CREATE TABLE account_class (
-    account_id INT NOT NULL,
-    class_id INT NOT NULL
+    account_id BIGINT NOT NULL,
+    class_id BIGINT NOT NULL
 );
 
 CREATE TABLE lesson_attendance (
