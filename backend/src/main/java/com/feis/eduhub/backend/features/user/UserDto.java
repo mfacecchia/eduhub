@@ -2,7 +2,7 @@ package com.feis.eduhub.backend.features.user;
 
 import com.feis.eduhub.backend.features.account.Account;
 import com.feis.eduhub.backend.features.credentials.Credentials;
-import com.feis.eduhub.backend.features.role.Role;
+import com.feis.eduhub.backend.features.role.SystemRole;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,10 +17,11 @@ import lombok.NoArgsConstructor;
  * @param email     User's email address
  * @param icon      Path or URL to user's profile icon
  * @param roleName  Name of the user's role in the database
+ * @param roleId    User's role ID (generated from DB)
  * 
  * @see Credentials
  * @see Account
- * @see Role
+ * @see SystemRole
  */
 @AllArgsConstructor
 @NoArgsConstructor

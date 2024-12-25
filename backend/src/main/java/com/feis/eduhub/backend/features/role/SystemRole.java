@@ -8,13 +8,13 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Role {
+public class SystemRole {
     @NonNull
     private Long roleId;
     @NonNull
     private String roleName;
 
-    public Role(@NonNull String roleName) {
+    public SystemRole(@NonNull String roleName) {
         this.roleName = roleName;
     }
 }

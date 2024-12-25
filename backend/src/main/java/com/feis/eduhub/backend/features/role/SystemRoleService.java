@@ -10,11 +10,11 @@ import com.feis.eduhub.backend.common.exceptions.AppException;
 import com.feis.eduhub.backend.common.exceptions.DataFetchException;
 import com.feis.eduhub.backend.common.exceptions.NotFoundException;
 
-public class RoleService {
-    private final RoleDao roleDao = new RoleDao();
+public class SystemRoleService {
+    private final SystemRoleDao roleDao = new SystemRoleDao();
     private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
 
-    public Role getRoleById(long id) throws AppException {
+    public SystemRole getRoleById(long id) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             return roleDao.findById(id, conn).orElseGet(null);
         } catch (NoSuchElementException e) {
@@ -24,7 +24,7 @@ public class RoleService {
         }
     }
 
-    public List<Role> getAllRoles() throws AppException {
+    public List<SystemRole> getAllRoles() throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             return roleDao.getAll(conn);
         } catch (SQLException e) {

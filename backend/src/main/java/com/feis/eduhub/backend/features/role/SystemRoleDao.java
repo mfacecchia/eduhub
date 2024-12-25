@@ -13,11 +13,11 @@ import java.util.Optional;
 import com.feis.eduhub.backend.common.interfaces.dao.Dao;
 import com.feis.eduhub.backend.common.lib.Sql;
 
-public class RoleDao implements Dao<Role> {
+public class SystemRoleDao implements Dao<SystemRole> {
     private final String TABLE_NAME = "account_role";
 
     @Override
-    public Optional<Role> findById(long id, Connection conn) throws SQLException {
+    public Optional<SystemRole> findById(long id, Connection conn) throws SQLException {
         String query = String.format("SELECT * FROM \"%s\" WHERE role_id = ?", TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(id));
@@ -29,8 +29,8 @@ public class RoleDao implements Dao<Role> {
     }
 
     @Override
-    public List<Role> getAll(Connection conn) throws SQLException {
-        List<Role> rolesList = new ArrayList<>();
+    public List<SystemRole> getAll(Connection conn) throws SQLException {
+        List<SystemRole> rolesList = new ArrayList<>();
         String query = String.format("SELECT * FROM \"%s\"", TABLE_NAME);
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
@@ -40,9 +40,9 @@ public class RoleDao implements Dao<Role> {
         return rolesList;
     }
 
-    private Role getTableData(ResultSet rs) throws SQLException {
+    private SystemRole getTableData(ResultSet rs) throws SQLException {
         try {
-            return new Role(
+            return new SystemRole(
                     (Long) rs.getObject("role_id"),
                     rs.getString("role_name"));
         } catch (NullPointerException e) {
