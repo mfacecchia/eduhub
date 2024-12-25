@@ -47,7 +47,7 @@ public class LessonDao implements ModelDao<Lesson> {
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         Sql.setParams(ps, Arrays.asList(lesson.getLessonDate(), lesson.getStartsAt(), lesson.getEndsAt(),
-                lesson.getRoomNo(), lesson.getAccountId(), lesson.getClassId()));
+                lesson.getRoomNo(), lesson.getCreatedById(), lesson.getClassId()));
         ps.executeUpdate();
         ResultSet generatedKeys = ps.getGeneratedKeys();
         if (!generatedKeys.next()) {
@@ -64,7 +64,7 @@ public class LessonDao implements ModelDao<Lesson> {
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(lesson.getLessonDate(), lesson.getStartsAt(), lesson.getEndsAt(),
-                lesson.getRoomNo(), lesson.getAccountId(), lesson.getClassId(), id));
+                lesson.getRoomNo(), lesson.getCreatedById(), lesson.getClassId(), id));
         ps.executeUpdate();
     }
 
