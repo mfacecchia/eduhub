@@ -9,7 +9,7 @@ DELETE FROM lesson;
 DELETE FROM account_class;
 DELETE FROM system_class;
 DELETE FROM logged_device;
-DELETE FROM notice;
+DELETE FROM system_notice;
 DELETE FROM credentials;
 DELETE FROM account;
 DELETE FROM account_role;
@@ -18,7 +18,7 @@ DELETE FROM account_role;
 ALTER SEQUENCE account_role_role_id_seq RESTART WITH 1;
 ALTER SEQUENCE account_account_id_seq RESTART WITH 1;
 ALTER SEQUENCE credentials_credentials_id_seq RESTART WITH 1;
-ALTER SEQUENCE notice_notice_id_seq RESTART WITH 1;
+ALTER SEQUENCE system_notice_notice_id_seq RESTART WITH 1;
 ALTER SEQUENCE logged_device_device_id_seq RESTART WITH 1;
 ALTER SEQUENCE lesson_lesson_id_seq RESTART WITH 1;
 ALTER SEQUENCE system_class_class_id_seq RESTART WITH 1;
@@ -57,9 +57,9 @@ INSERT INTO account_class (account_id, class_id) VALUES
     (4, 2),
     (5, 2);
 
-INSERT INTO lesson (lesson_date, starts_at, ends_at, room_no, account_id, class_id) VALUES
-    ('2023-11-15', '09:00:00', '10:30:00', 101, 2, 1),
-    ('2023-11-16', '11:00:00', '12:30:00', 102, 3, 2);
+INSERT INTO lesson (lesson_date, starts_at, ends_at, room_no, created_by_id, class_id) VALUES
+    ('2023-11-15', '09:00:00', '10:30:00', 101, 1, 1),
+    ('2023-11-16', '11:00:00', '12:30:00', 102, 1, 2);
 
 INSERT INTO lesson_attendance (account_id, lesson_id, attended) VALUES
     (4, 1, true),
@@ -93,7 +93,7 @@ INSERT INTO account_quiz_answer (account_id, answer_id) VALUES
     (4, 3),
     (5, 5);
 
-INSERT INTO notice (notice_message, account_id) VALUES
+INSERT INTO system_notice (notice_message, account_id) VALUES
     ('Welcome to the new semester!', 1),
     ('Your Math homework is due tomorrow', 4),
     ('Class canceled for tomorrow', 5);
