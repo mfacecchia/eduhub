@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import com.feis.eduhub.backend.common.interfaces.dao.ModelDao;
 import com.feis.eduhub.backend.common.lib.Sql;
+import com.feis.eduhub.backend.features.accountClass.dto.ClassDto;
 
 public class SystemClassDao implements ModelDao<SystemClass> {
     private final String TABLE_NAME = "system_class";
@@ -92,9 +93,50 @@ public class SystemClassDao implements ModelDao<SystemClass> {
         ps.executeUpdate();
     }
 
+    public List<ClassDto> findAllByAccountId(long id, Connection conn) throws SQLException {
+        List<ClassDto> classesList = new ArrayList<>();
+        String query = String.format(
+                "SELECT system_class.class_id, course_name, class_address, class_year, teacher_id FROM \"%s\" INNER JOIN \"account_class\" ON account_class.class_id = system_class.class_id WHERE account_class.account_id = ?",
+                TABLE_NAME);
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(id));
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            classesList.add(getDtoTableData(rs));
+        }
+        return classesList;
+    }
+
+    public List<ClassDto> findSingleByAccountId(long accountId, long classId, Connection conn) throws SQLException {
+        List<ClassDto> classesList = new ArrayList<>();
+        String query = String.format(
+                "SELECT system_class.class_id, course_name, class_address, class_year, teacher_id FROM \"%s\" INNER JOIN \"account_class\" ON account_class.class_id = system_class.class_id WHERE account_class.account_id = ? and account_class.class_id = ?",
+                TABLE_NAME);
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(accountId, classId));
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            classesList.add(getDtoTableData(rs));
+        }
+        return classesList;
+    }
+
     private SystemClass getTableData(ResultSet rs) throws SQLException {
         try {
             return new SystemClass(
+                    (Long) rs.getObject("class_id"),
+                    rs.getString("course_name"),
+                    rs.getString("class_address"),
+                    (Integer) rs.getObject("class_year"),
+                    (Long) rs.getObject("teacher_id"));
+        } catch (NullPointerException e) {
+            throw new IllegalStateException("Illegal values found", e);
+        }
+    }
+
+    private ClassDto getDtoTableData(ResultSet rs) throws SQLException {
+        try {
+            return new ClassDto(
                     (Long) rs.getObject("class_id"),
                     rs.getString("course_name"),
                     rs.getString("class_address"),
