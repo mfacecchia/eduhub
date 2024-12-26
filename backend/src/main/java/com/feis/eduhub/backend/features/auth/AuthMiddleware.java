@@ -10,7 +10,7 @@ import io.javalin.http.Handler;
 import io.javalin.http.UnauthorizedResponse;
 
 public class AuthMiddleware {
-    private final JwtService jwtService = new JwtService();
+    private static final JwtService jwtService = new JwtService();
 
     /**
      * Middleware handler for user authentication state check.
@@ -38,7 +38,7 @@ public class AuthMiddleware {
      * 
      * @see Handler
      */
-    public Handler isLoggedIn(boolean strict, boolean sendResponseOnValidToken, boolean setAccountId) {
+    public static Handler isLoggedIn(boolean strict, boolean sendResponseOnValidToken, boolean setAccountId) {
         return (ctx) -> {
             try {
                 String token = ctx.cookie("sessionId");
