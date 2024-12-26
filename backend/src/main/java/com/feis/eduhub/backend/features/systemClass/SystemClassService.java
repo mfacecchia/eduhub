@@ -10,6 +10,7 @@ import com.feis.eduhub.backend.common.exceptions.AppException;
 import com.feis.eduhub.backend.common.exceptions.DataFetchException;
 import com.feis.eduhub.backend.common.exceptions.DatabaseQueryException;
 import com.feis.eduhub.backend.common.exceptions.NotFoundException;
+import com.feis.eduhub.backend.features.accountClass.dto.ClassDto;
 
 public class SystemClassService {
     private final SystemClassDao systemClassDao;
@@ -71,6 +72,22 @@ public class SystemClassService {
             conn.commit();
         } catch (SQLException e) {
             throw new DatabaseQueryException("Error while deleting class", e);
+        }
+    }
+
+    public List<ClassDto> getClassesByAccountId(long accountId) throws AppException {
+        try (Connection conn = databaseConnection.getConnection()) {
+            return systemClassDao.findAllByAccountId(accountId, conn);
+        } catch (SQLException e) {
+            throw new DataFetchException("Could not fetch data", e);
+        }
+    }
+
+    public List<ClassDto> getSingleClassByAccountId(long accountId, long classId) throws AppException {
+        try (Connection conn = databaseConnection.getConnection()) {
+            return systemClassDao.findSingleByAccountId(accountId, classId, conn);
+        } catch (SQLException e) {
+            throw new DataFetchException("Could not fetch data", e);
         }
     }
 }
