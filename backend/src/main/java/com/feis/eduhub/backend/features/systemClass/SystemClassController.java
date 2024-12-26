@@ -24,7 +24,7 @@ public class SystemClassController implements EndpointsRegister {
     private Handler createClass() {
         return (ctx) -> {
             JSONObject json = new JSONObject(ctx.body());
-            SystemClass systemClass = SystemClassUtility.getClassFromBody(json);
+            SystemClass systemClass = SystemClassUtility.getClassFromBody(json, false);
             systemClassService.createClass(systemClass);
             ResponseDto<SystemClass> response = new ResponseDto.ResponseBuilder<SystemClass>(201)
                     .withMessage("Successfully created class")
