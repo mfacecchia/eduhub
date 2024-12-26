@@ -18,8 +18,13 @@ import io.javalin.http.HandlerType;
 
 public class SystemClassController implements EndpointsRegister {
     private final String BASE_URL = "/class";
-    private final SystemClassService systemClassService = new SystemClassService();
-    private final Rbac rbac = new Rbac();
+    private final SystemClassService systemClassService;
+    private final Rbac rbac;
+
+    public SystemClassController() {
+        systemClassService = new SystemClassService();
+        rbac = new Rbac();
+    }
 
     @Override
     public void registerEndpoints(Javalin app) {
@@ -28,22 +33,25 @@ public class SystemClassController implements EndpointsRegister {
                 MiddlewareExecutor.executeOnMethod(EnumSet.of(HandlerType.POST),
                         AuthMiddleware.isLoggedIn(true, false, true)));
 
-        app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, createClass);
+        app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, createClass());
     }
 
-    private final Handler createClass = (ctx) -> {
-        JSONObject json = new JSONObject(ctx.body());
-        SystemClass systemClass = getClassFromBody(json);
-        boolean isAllowed = rbac.checkPermissionFromPersistence(ctx.attribute("accountId"), AppAction.MANAGE_CLASSES);
-        if (!isAllowed) {
-            throw new UnauthorizedException("Not authorized to complete this operation.");
-        }
-        systemClassService.createClass(systemClass);
-        ResponseDto<SystemClass> response = new ResponseDto.ResponseBuilder<SystemClass>(201)
-                .withMessage("Successfully created class")
-                .withData(systemClass)
-                .build();
-        ctx.status(201).json(response);
+    private Handler createClass() {
+        return (ctx) -> {
+            JSONObject json = new JSONObject(ctx.body());
+            SystemClass systemClass = getClassFromBody(json);
+            boolean isAllowed = rbac.checkPermissionFromPersistence(ctx.attribute("accountId"),
+                    AppAction.MANAGE_CLASSES);
+            if (!isAllowed) {
+                throw new UnauthorizedException("Not authorized to complete this operation.");
+            }
+            systemClassService.createClass(systemClass);
+            ResponseDto<SystemClass> response = new ResponseDto.ResponseBuilder<SystemClass>(201)
+                    .withMessage("Successfully created class")
+                    .withData(systemClass)
+                    .build();
+            ctx.status(201).json(response);
+        };
     };
 
     private SystemClass getClassFromBody(JSONObject json) {
