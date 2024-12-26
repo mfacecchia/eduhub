@@ -70,6 +70,7 @@ public class SystemClassDao implements ModelDao<SystemClass> {
         return systemClass;
     }
 
+    // TODO: Throw on element not found
     @Override
     public void update(long id, SystemClass systemClass, Connection conn) throws SQLException {
         String query = String.format(
@@ -82,6 +83,7 @@ public class SystemClassDao implements ModelDao<SystemClass> {
         ps.executeUpdate();
     }
 
+    // TODO: Throw on element not found
     @Override
     public void delete(long id, Connection conn) throws SQLException {
         String query = String.format("DELETE FROM \"%s\" WHERE class_id = ?", TABLE_NAME);
