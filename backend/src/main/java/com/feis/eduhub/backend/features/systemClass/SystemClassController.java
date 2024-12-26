@@ -21,6 +21,7 @@ public class SystemClassController implements EndpointsRegister {
     public void registerEndpoints(Javalin app) {
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, createClass());
         app.put(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, updateClass());
+        app.delete(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, deleteClass());
     }
 
     private Handler createClass() {
@@ -47,6 +48,18 @@ public class SystemClassController implements EndpointsRegister {
             systemClassService.updateClass(classId, systemClass);
             ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(200)
                     .withMessage("Class successfully updated")
+                    .build();
+            ctx.status(200).json(response);
+        };
+    }
+
+    private Handler deleteClass() {
+        return (ctx) -> {
+            JSONObject json = new JSONObject(ctx.body());
+            Long classId = json.getLong("classId");
+            systemClassService.deleteClass(classId);
+            ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(200)
+                    .withMessage("Class successfully deleted")
                     .build();
             ctx.status(200).json(response);
         };
