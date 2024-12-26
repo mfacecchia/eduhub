@@ -21,7 +21,7 @@ public class SystemRoleService {
 
     public SystemRole getRoleById(long id) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
-            return roleDao.findById(id, conn).orElseGet(null);
+            return roleDao.findById(id, conn).orElseThrow();
         } catch (NoSuchElementException e) {
             throw new NotFoundException("Role not found", e);
         } catch (SQLException e) {

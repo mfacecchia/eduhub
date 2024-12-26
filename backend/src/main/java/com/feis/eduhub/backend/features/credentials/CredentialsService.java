@@ -34,7 +34,7 @@ public class CredentialsService {
 
     public Credentials getCredentialsById(long id) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
-            return credentialsDao.findById(id, conn).orElseGet(null);
+            return credentialsDao.findById(id, conn).orElseThrow();
         } catch (NoSuchElementException e) {
             throw new NotFoundException("Credentials not found", e);
         } catch (SQLException e) {

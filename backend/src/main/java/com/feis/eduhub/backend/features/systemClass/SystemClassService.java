@@ -23,7 +23,7 @@ public class SystemClassService {
 
     public SystemClass getClassById(long id) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
-            return systemClassDao.findById(id, conn).orElseGet(null);
+            return systemClassDao.findById(id, conn).orElseThrow();
         } catch (NoSuchElementException e) {
             throw new NotFoundException("Class not found", e);
         } catch (SQLException e) {
@@ -83,9 +83,11 @@ public class SystemClassService {
         }
     }
 
-    public List<ClassDto> getSingleClassByAccountId(long accountId, long classId) throws AppException {
+    public ClassDto getSingleClassByAccountId(long accountId, long classId) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
-            return systemClassDao.findSingleByAccountId(accountId, classId, conn);
+            return systemClassDao.findSingleByAccountId(accountId, classId, conn).orElseThrow();
+        } catch (NoSuchElementException e) {
+            throw new NotFoundException("Class not found", e);
         } catch (SQLException e) {
             throw new DataFetchException("Could not fetch data", e);
         }
