@@ -3,6 +3,7 @@ package com.feis.eduhub.backend.features.systemClass;
 import org.json.JSONObject;
 
 import com.feis.eduhub.backend.common.dto.ResponseDto;
+import com.feis.eduhub.backend.common.exceptions.ValidationException;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
 
 import io.javalin.Javalin;
@@ -19,6 +20,7 @@ public class SystemClassController implements EndpointsRegister {
     @Override
     public void registerEndpoints(Javalin app) {
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, createClass());
+        app.put(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, updateClass());
     }
 
     private Handler createClass() {
@@ -33,4 +35,20 @@ public class SystemClassController implements EndpointsRegister {
             ctx.status(201).json(response);
         };
     };
+
+    private Handler updateClass() {
+        return (ctx) -> {
+            JSONObject json = new JSONObject(ctx.body());
+            SystemClass systemClass = SystemClassUtility.getClassFromBody(json, true);
+            Long classId = systemClass.getClassId();
+            if (classId == null) {
+                throw new ValidationException("Invalid Class ID");
+            }
+            systemClassService.updateClass(classId, systemClass);
+            ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(200)
+                    .withMessage("Class successfully updated")
+                    .build();
+            ctx.status(200).json(response);
+        };
+    }
 }
