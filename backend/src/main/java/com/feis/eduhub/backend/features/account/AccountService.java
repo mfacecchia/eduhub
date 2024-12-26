@@ -25,10 +25,17 @@ import com.feis.eduhub.backend.features.credentials.CredentialsService;
  * @see AccountDao
  */
 public class AccountService {
-    private final AccountDao accountDao = new AccountDao();
-    private final CredentialsDao credentialsDao = new CredentialsDao();
-    private final CredentialsService credentialsService = new CredentialsService();
-    private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+    private final AccountDao accountDao;
+    private final CredentialsDao credentialsDao;
+    private final CredentialsService credentialsService;
+    private final DatabaseConnection databaseConnection;
+
+    public AccountService() {
+        accountDao = new AccountDao();
+        credentialsDao = new CredentialsDao();
+        credentialsService = new CredentialsService();
+        databaseConnection = DatabaseConnection.getInstance();
+    }
 
     public Account getAccountById(long id) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {

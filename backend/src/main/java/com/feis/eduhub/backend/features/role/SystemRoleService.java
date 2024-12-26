@@ -11,8 +11,13 @@ import com.feis.eduhub.backend.common.exceptions.DataFetchException;
 import com.feis.eduhub.backend.common.exceptions.NotFoundException;
 
 public class SystemRoleService {
-    private final SystemRoleDao roleDao = new SystemRoleDao();
-    private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+    private final SystemRoleDao roleDao;
+    private final DatabaseConnection databaseConnection;
+
+    public SystemRoleService() {
+        roleDao = new SystemRoleDao();
+        databaseConnection = DatabaseConnection.getInstance();
+    }
 
     public SystemRole getRoleById(long id) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {

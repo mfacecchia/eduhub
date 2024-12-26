@@ -14,7 +14,6 @@ import com.feis.eduhub.backend.common.interfaces.dao.Dao;
 import com.feis.eduhub.backend.common.lib.Sql;
 
 public class UserDao implements Dao<UserDto> {
-
     private final String DATABASE_FIELDS = "account.account_id, first_name, last_name, icon, email, role_name";
     private final String JOIN_QUERIES = "INNER JOIN credentials ON credentials.account_id = account.account_id INNER JOIN account_role ON account_role.role_id = account.role_id";
 

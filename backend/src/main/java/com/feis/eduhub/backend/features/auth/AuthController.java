@@ -26,42 +26,52 @@ import io.javalin.http.SameSite;
 
 public class AuthController implements EndpointsRegister {
     private final String BASE_URL = "/auth";
-    private final AccountService accountService = new AccountService();
-    private final CredentialsService credentialsService = new CredentialsService();
-    private final JwtService jwtService = new JwtService();
+    private final AccountService accountService;
+    private final CredentialsService credentialsService;
+    private final JwtService jwtService;
+
+    public AuthController() {
+        accountService = new AccountService();
+        credentialsService = new CredentialsService();
+        jwtService = new JwtService();
+    }
 
     @Override
     public void registerEndpoints(Javalin app) {
         app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/*",
                 AuthMiddleware.isLoggedIn(false, true, false));
-        app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/login", loginHandler);
-        app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/signup", signupHandler);
+        app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/login", loginHandler());
+        app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/signup", signupHandler());
     }
 
-    private final Handler signupHandler = (ctx) -> {
-        JSONObject json = new JSONObject(ctx.body());
-        if (json.isEmpty()) {
-            throw new ValidationException("No values provided.");
-        }
-        // TODO: Add data validation
-        UserDto user = createAccount(json);
-        ResponseDto<UserDto> response = new ResponseDto.ResponseBuilder<UserDto>(200)
-                .withMessage("User created successfully")
-                .withData(user)
-                .build();
-        ctx.status(200).json(response);
-    };
+    private Handler signupHandler() {
+        return (ctx) -> {
+            JSONObject json = new JSONObject(ctx.body());
+            if (json.isEmpty()) {
+                throw new ValidationException("No values provided.");
+            }
+            // TODO: Add data validation
+            UserDto user = createAccount(json);
+            ResponseDto<UserDto> response = new ResponseDto.ResponseBuilder<UserDto>(200)
+                    .withMessage("User created successfully")
+                    .withData(user)
+                    .build();
+            ctx.status(200).json(response);
+        };
+    }
 
-    private final Handler loginHandler = (ctx) -> {
-        JSONObject json = new JSONObject(ctx.body());
-        if (json.isEmpty()) {
-            throw new ValidationException("No values provided.");
-        }
-        Credentials storedCredentials = checkCredentials(json);
-        JwtData jwtData = setJwt(storedCredentials, json.optBoolean("rememberMe"));
-        setJwtCookie(ctx, jwtData);
-        ctx.status(200).result("Authenticated");
-    };
+    private Handler loginHandler() {
+        return (ctx) -> {
+            JSONObject json = new JSONObject(ctx.body());
+            if (json.isEmpty()) {
+                throw new ValidationException("No values provided.");
+            }
+            Credentials storedCredentials = checkCredentials(json);
+            JwtData jwtData = setJwt(storedCredentials, json.optBoolean("rememberMe"));
+            setJwtCookie(ctx, jwtData);
+            ctx.status(200).result("Authenticated");
+        };
+    }
 
     private UserDto createAccount(JSONObject json) throws AppException {
         Account account = getAccountData(json);

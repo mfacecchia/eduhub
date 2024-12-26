@@ -12,8 +12,13 @@ import com.feis.eduhub.backend.common.exceptions.DatabaseQueryException;
 import com.feis.eduhub.backend.common.exceptions.NotFoundException;
 
 public class SystemClassService {
-    private final SystemClassDao systemClassDao = new SystemClassDao();
-    private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+    private final SystemClassDao systemClassDao;
+    private final DatabaseConnection databaseConnection;
+
+    public SystemClassService() {
+        systemClassDao = new SystemClassDao();
+        databaseConnection = DatabaseConnection.getInstance();
+    }
 
     public SystemClass getClassById(long id) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {

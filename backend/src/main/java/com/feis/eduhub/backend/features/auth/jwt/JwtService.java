@@ -6,8 +6,13 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.SetParams;
 
 public class JwtService {
-    private final RedisConnection redisConnection = RedisConnection.getInstance();
-    private final JwtDao jwtDao = new JwtDao();
+    private final RedisConnection redisConnection;
+    private final JwtDao jwtDao;
+
+    public JwtService() {
+        redisConnection = RedisConnection.getInstance();
+        jwtDao = new JwtDao();
+    }
 
     public void storeJwt(String jti, String accountId, long exp) {
         try (Jedis conn = redisConnection.getConnection()) {

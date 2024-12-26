@@ -12,8 +12,13 @@ import com.feis.eduhub.backend.common.exceptions.DatabaseQueryException;
 import com.feis.eduhub.backend.common.exceptions.NotFoundException;
 
 public class LessonService {
-    private final LessonDao lessonDao = new LessonDao();
-    private final DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+    private final LessonDao lessonDao;
+    private final DatabaseConnection databaseConnection;
+
+    public LessonService() {
+        lessonDao = new LessonDao();
+        databaseConnection = DatabaseConnection.getInstance();
+    }
 
     public Lesson getLessonById(long id) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
