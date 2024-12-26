@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import com.feis.eduhub.backend.common.interfaces.dao.ModelDao;
 import com.feis.eduhub.backend.common.lib.Sql;
+import com.feis.eduhub.backend.features.lessonAttendance.dto.LessonDto;
 
 public class LessonDao implements ModelDao<Lesson> {
     private final String TABLE_NAME = "lesson";
@@ -88,6 +89,34 @@ public class LessonDao implements ModelDao<Lesson> {
         ps.executeUpdate();
     }
 
+    public List<LessonDto> findAllByAccountId(long id, Connection conn) throws SQLException {
+        List<LessonDto> lessonsList = new ArrayList<>();
+        String query = String.format(
+                "SELECT lesson.lesson_id, lesson_date, starts_at, ends_at, room_no, attended FROM \"%s\" INNER JOIN \"lesson_attendance\" ON lesson_attendance.lesson_id = lesson.lesson_id WHERE lesson_attendance.account_id = ?",
+                TABLE_NAME);
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(id));
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            lessonsList.add(getDtoTableData(rs));
+        }
+        return lessonsList;
+    }
+
+    public Optional<LessonDto> findSingleByAccountId(long accountId, long lessonId, Connection conn)
+            throws SQLException {
+        String query = String.format(
+                "SELECT lesson.lesson_id, lesson_date, starts_at, ends_at, room_no, attended FROM \"%s\" INNER JOIN \"lesson_attendance\" ON lesson_attendance.lesson_id = lesson.lesson_id WHERE lesson_attendance.account_id = ? and lesson.lesson_id = ?",
+                TABLE_NAME);
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(accountId, lessonId));
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return Optional.of(getDtoTableData(rs));
+        }
+        return Optional.empty();
+    }
+
     private Lesson getTableData(ResultSet rs) throws SQLException {
         try {
             return new Lesson(
@@ -98,6 +127,20 @@ public class LessonDao implements ModelDao<Lesson> {
                     (Integer) rs.getObject("room_no"),
                     (Long) rs.getObject("created_by_id"),
                     (Long) rs.getObject("class_id"));
+        } catch (NullPointerException e) {
+            throw new IllegalStateException("Illegal values found", e);
+        }
+    }
+
+    private LessonDto getDtoTableData(ResultSet rs) throws SQLException {
+        try {
+            return new LessonDto(
+                    (Long) rs.getObject("lesson_id"),
+                    rs.getDate("lesson_date"),
+                    rs.getTime("starts_at"),
+                    rs.getTime("ends_at"),
+                    (Integer) rs.getObject("room_no"),
+                    (Boolean) rs.getObject("attended"));
         } catch (NullPointerException e) {
             throw new IllegalStateException("Illegal values found", e);
         }
