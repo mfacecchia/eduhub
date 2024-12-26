@@ -14,7 +14,7 @@ public class MiddlewareExecutor {
     /**
      * Executes the given {@code middleware} only if the HTTP method of the current
      * request matches any of the specified methods (or if the {@code methodsSet}
-     * set is empty (executes the mw for all methods)).
+     * set is empty or {@code null} (executes the mw for all methods)).
      *
      * @param methodsSet A {@code HandlerType} Set containing the HTTP methods
      *                   for which the middleware should be executed
@@ -27,7 +27,7 @@ public class MiddlewareExecutor {
      */
     public static Handler executeOnMethod(Set<HandlerType> methodsSet, Handler middleware) {
         return (ctx) -> {
-            if (methodsSet.isEmpty()
+            if (methodsSet == null || methodsSet.isEmpty()
                     || methodsSet.contains(ctx.method())) {
                 middleware.handle(ctx);
             }
