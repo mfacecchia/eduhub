@@ -107,18 +107,17 @@ public class SystemClassDao implements ModelDao<SystemClass> {
         return classesList;
     }
 
-    public List<ClassDto> findSingleByAccountId(long accountId, long classId, Connection conn) throws SQLException {
-        List<ClassDto> classesList = new ArrayList<>();
+    public Optional<ClassDto> findSingleByAccountId(long accountId, long classId, Connection conn) throws SQLException {
         String query = String.format(
                 "SELECT system_class.class_id, course_name, class_address, class_year, teacher_id FROM \"%s\" INNER JOIN \"account_class\" ON account_class.class_id = system_class.class_id WHERE account_class.account_id = ? and account_class.class_id = ?",
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(accountId, classId));
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            classesList.add(getDtoTableData(rs));
+        if (rs.next()) {
+            return Optional.of(getDtoTableData(rs));
         }
-        return classesList;
+        return Optional.empty();
     }
 
     private SystemClass getTableData(ResultSet rs) throws SQLException {
