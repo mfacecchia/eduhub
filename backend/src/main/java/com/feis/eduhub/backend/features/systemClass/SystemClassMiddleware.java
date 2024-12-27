@@ -36,7 +36,7 @@ public class SystemClassMiddleware implements EndpointsRegister {
 
     @Override
     public void registerEndpoints(Javalin app) {
-        app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL,
+        app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/*",
                 MiddlewareExecutor.executeOnMethod(
                         EnumSet.allOf(HandlerType.class),
                         IsLoggedInMiddleware.isLoggedIn(true, false, true, false)));
