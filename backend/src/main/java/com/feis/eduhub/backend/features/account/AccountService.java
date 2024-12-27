@@ -10,6 +10,7 @@ import com.feis.eduhub.backend.common.exceptions.AppException;
 import com.feis.eduhub.backend.common.exceptions.DataFetchException;
 import com.feis.eduhub.backend.common.exceptions.DatabaseQueryException;
 import com.feis.eduhub.backend.common.exceptions.NotFoundException;
+import com.feis.eduhub.backend.features.account.dto.AccountDto;
 import com.feis.eduhub.backend.features.credentials.Credentials;
 import com.feis.eduhub.backend.features.credentials.CredentialsDao;
 import com.feis.eduhub.backend.features.credentials.CredentialsService;
@@ -85,6 +86,14 @@ public class AccountService {
             accountDao.delete(accountId, conn);
         } catch (SQLException e) {
             throw new DatabaseQueryException("Error while deleting account", e);
+        }
+    }
+
+    public List<AccountDto> getAllAttendancesByLessonId(long id) throws AppException {
+        try (Connection conn = databaseConnection.getConnection()) {
+            return accountDao.findAttendancesByLessonId(id, conn);
+        } catch (SQLException e) {
+            throw new DataFetchException("Could not fetch data", e);
         }
     }
 }
