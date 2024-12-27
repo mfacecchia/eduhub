@@ -4,16 +4,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Interface representing the more generic
- * {@link com.feis.eduhub.backend.common.interfaces.dao.Dao Dao} interface as a more
- * suitable alternative for app models (which are used to represent SQL Database
- * entities) providing methods for creation, update, and deletion.
+ * Interface providing methods for creation, update, and deletion on a
+ * relational database through an active {@code Connection}.
  * 
  * @param <T> The type of entity this DAO handles
  * 
- * @see Dao
+ * @see SimpleDatabaseReadDao
  */
-public interface ModelDao<T> extends Dao<T> {
+public interface DatabaseWriteDao<T> {
+
     T create(T obj, Connection conn) throws SQLException;
 
     void update(long id, T obj, Connection conn) throws SQLException;
