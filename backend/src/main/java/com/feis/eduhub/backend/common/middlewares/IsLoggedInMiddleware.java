@@ -30,6 +30,9 @@ public class IsLoggedInMiddleware {
     /**
      * Middleware handler for user authentication state check.
      * 
+     * If the JWT is invalid, then the token gets removed from the user cookies and
+     * persistence storage as well.
+     * 
      * @param strict                   If true, throws
      *                                 {@link com.feis.eduhub.backend.features.auth.jwt.errors.TokenValidationException
      *                                 TokenValidationException} when no
@@ -41,7 +44,14 @@ public class IsLoggedInMiddleware {
      *                                 when a valid token is present.
      *                                 Useful for endpoints that should only be
      *                                 accessed by non-authenticated users.
-     * @param setAccountId             If tr
+     * @param setAccountId             If true adds a {@code accountId} context
+     *                                 attribute which can be used by next handlers
+     *                                 as a reference of which account is making the
+     *                                 request
+     * @param setJwt                   If true adds a {@code jwtData} context Object
+     *                                 attribute which represents the auth token
+     *                                 that is getting used to authenticate the
+     *                                 account
      * 
      * @return A Handler (used as a middleware) that processes the
      *         authentication verification logic.
@@ -52,35 +62,6 @@ public class IsLoggedInMiddleware {
      * 
      * @see Handler
      */
-    public static Handler isLoggedIn(boolean strict, boolean sendResponseOnValidToken, boolean setAccountId) {
-        return (ctx) -> {
-            try {
-                String token = ctx.cookie("sessionId");
-                if (token == null && strict) {
-                    throw new TokenValidationException("Missing or invalid token");
-                }
-                if (token != null) {
-                    JwtData jwtData = JsonWebToken.validateToken(token);
-                    String result = jwtService.getJwt(jwtData.getJti());
-                    if (result == null) {
-                        removeAuthCookie(ctx);
-                        throw new TokenValidationException("Invalid token");
-                    }
-                    if (sendResponseOnValidToken) {
-                        throw new AlreadyAuthenticatedException("Already logged in");
-                    }
-                    if (setAccountId) {
-                        ctx.attribute("accountId", jwtData.getAccountId());
-                    }
-                }
-            } catch (JWTVerificationException e) {
-                removeAuthCookie(ctx);
-                throw new TokenValidationException("Invalid token");
-            }
-        };
-    }
-
-    // WIP: will replace the previous method
     public static Handler isLoggedIn(boolean strict, boolean sendResponseOnValidToken,
             boolean setAccountId, boolean setJwt) {
         return (ctx) -> {
