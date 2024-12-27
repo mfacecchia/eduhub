@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import com.feis.eduhub.backend.common.exceptions.UnauthorizedException;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
 import com.feis.eduhub.backend.common.lib.MiddlewareExecutor;
+import com.feis.eduhub.backend.common.middlewares.IsLoggedInMiddleware;
 import com.feis.eduhub.backend.common.rbac.AppAction;
 import com.feis.eduhub.backend.common.rbac.Rbac;
 import com.feis.eduhub.backend.features.auth.AuthMiddleware;
@@ -38,7 +39,7 @@ public class SystemClassMiddleware implements EndpointsRegister {
         app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL,
                 MiddlewareExecutor.executeOnMethod(
                         EnumSet.allOf(HandlerType.class),
-                        AuthMiddleware.isLoggedIn(true, false, true)));
+                        IsLoggedInMiddleware.isLoggedIn(true, false, true)));
 
         app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL,
                 MiddlewareExecutor.executeOnMethod(
