@@ -30,6 +30,7 @@ public class AccountController implements EndpointsRegister {
 
         app.get(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, accountInfoHandler());
         app.put(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, accountUpdateHandler());
+        app.delete(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, accountDeleteHandler());
     }
 
     private Handler accountInfoHandler() {
@@ -54,6 +55,21 @@ public class AccountController implements EndpointsRegister {
             accountService.updateAccount(account.getAccountId(), account);
             ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(200)
                     .withMessage("User info successfully updated")
+                    .build();
+            ctx.status(200).json(response);
+        };
+    }
+
+    private Handler accountDeleteHandler() {
+        return (ctx) -> {
+            JSONObject json = new JSONObject(ctx.body());
+            Long accountId = json.optLongObject("accountId");
+            if (accountId <= 0) {
+                throw new ValidationException("Invalid accountId");
+            }
+            accountService.deleteAccount(accountId);
+            ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(200)
+                    .withMessage("User successfully deleted")
                     .build();
             ctx.status(200).json(response);
         };
