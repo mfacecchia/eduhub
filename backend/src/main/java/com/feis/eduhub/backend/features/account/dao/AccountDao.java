@@ -10,12 +10,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.feis.eduhub.backend.common.interfaces.dao.ModelDao;
+import com.feis.eduhub.backend.common.interfaces.dao.DatabaseWriteDao;
+import com.feis.eduhub.backend.common.interfaces.dao.SimpleDatabaseReadDao;
 import com.feis.eduhub.backend.common.lib.Sql;
 import com.feis.eduhub.backend.features.account.Account;
 import com.feis.eduhub.backend.features.account.dto.AccountAttendanceDto;
 
-public class AccountDao implements ModelDao<Account> {
+public class AccountDao implements SimpleDatabaseReadDao<Account>, DatabaseWriteDao<Account> {
     private final String TABLE_NAME = "account";
 
     @Override

@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.feis.eduhub.backend.common.interfaces.dao.Dao;
+import com.feis.eduhub.backend.common.interfaces.dao.SimpleDatabaseReadDao;
 import com.feis.eduhub.backend.common.lib.Sql;
 import com.feis.eduhub.backend.features.account.dto.AccountFullInfoDto;
 
@@ -30,9 +30,9 @@ import com.feis.eduhub.backend.features.account.dto.AccountFullInfoDto;
  * account_role tables to fetch complete account information.
  * 
  * @see AccountFullInfoDto
- * @see Dao
+ * @see SimpleDatabaseReadDao
  */
-public class AccountFullInfoDao implements Dao<AccountFullInfoDto> {
+public class AccountFullInfoDao implements SimpleDatabaseReadDao<AccountFullInfoDto> {
     private final String DATABASE_FIELDS = "account.account_id, first_name, last_name, icon, email, account_role.role_id, role_name";
     private final String JOIN_QUERIES = "INNER JOIN credentials ON credentials.account_id = account.account_id INNER JOIN account_role ON account_role.role_id = account.role_id";
 

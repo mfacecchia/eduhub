@@ -10,10 +10,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.feis.eduhub.backend.common.interfaces.dao.ModelDao;
+import com.feis.eduhub.backend.common.interfaces.dao.DatabaseWriteDao;
+import com.feis.eduhub.backend.common.interfaces.dao.SimpleDatabaseReadDao;
 import com.feis.eduhub.backend.common.lib.Sql;
 
-public class CredentialsDao implements ModelDao<Credentials> {
+public class CredentialsDao implements SimpleDatabaseReadDao<Credentials>, DatabaseWriteDao<Credentials> {
     private final String TABLE_NAME = "credentials";
 
     @Override

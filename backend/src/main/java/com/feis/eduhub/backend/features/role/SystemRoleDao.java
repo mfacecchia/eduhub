@@ -10,10 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.feis.eduhub.backend.common.interfaces.dao.Dao;
+import com.feis.eduhub.backend.common.interfaces.dao.SimpleDatabaseReadDao;
 import com.feis.eduhub.backend.common.lib.Sql;
 
-public class SystemRoleDao implements Dao<SystemRole> {
+public class SystemRoleDao implements SimpleDatabaseReadDao<SystemRole> {
     private final String TABLE_NAME = "account_role";
 
     @Override

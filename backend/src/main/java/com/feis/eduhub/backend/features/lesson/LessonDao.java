@@ -10,11 +10,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.feis.eduhub.backend.common.interfaces.dao.ModelDao;
+import com.feis.eduhub.backend.common.interfaces.dao.DatabaseWriteDao;
+import com.feis.eduhub.backend.common.interfaces.dao.SimpleDatabaseReadDao;
 import com.feis.eduhub.backend.common.lib.Sql;
 import com.feis.eduhub.backend.features.lessonAttendance.dto.LessonDto;
 
-public class LessonDao implements ModelDao<Lesson> {
+public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDao<Lesson> {
     private final String TABLE_NAME = "lesson";
 
     @Override
