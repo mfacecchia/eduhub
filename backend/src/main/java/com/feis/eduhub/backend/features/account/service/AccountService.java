@@ -1,4 +1,4 @@
-package com.feis.eduhub.backend.features.account;
+package com.feis.eduhub.backend.features.account.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,10 +10,10 @@ import com.feis.eduhub.backend.common.exceptions.AppException;
 import com.feis.eduhub.backend.common.exceptions.DataFetchException;
 import com.feis.eduhub.backend.common.exceptions.DatabaseQueryException;
 import com.feis.eduhub.backend.common.exceptions.NotFoundException;
+import com.feis.eduhub.backend.features.account.Account;
 import com.feis.eduhub.backend.features.account.dao.AccountDao;
 import com.feis.eduhub.backend.features.account.dto.AccountDto;
 import com.feis.eduhub.backend.features.account.dto.AccountFullInfoDto;
-import com.feis.eduhub.backend.features.account.service.AccountFullInfoService;
 import com.feis.eduhub.backend.features.credentials.Credentials;
 import com.feis.eduhub.backend.features.credentials.CredentialsDao;
 import com.feis.eduhub.backend.features.credentials.CredentialsService;

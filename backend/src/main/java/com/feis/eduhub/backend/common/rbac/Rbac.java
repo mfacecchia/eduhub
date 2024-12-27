@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.feis.eduhub.backend.common.exceptions.AppException;
 import com.feis.eduhub.backend.features.account.Account;
-import com.feis.eduhub.backend.features.account.AccountService;
+import com.feis.eduhub.backend.features.account.service.AccountService;
 
 /**
  * Utility class for role-based access control functionality.
