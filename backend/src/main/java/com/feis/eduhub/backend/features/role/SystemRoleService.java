@@ -19,6 +19,8 @@ public class SystemRoleService {
         databaseConnection = DatabaseConnection.getInstance();
     }
 
+    // TODO: May need to store roles in Redis as well to improve performance
+    // (long TTL & auto-update after 1 hour or so...)
     public SystemRole getRoleById(long id) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             return roleDao.findById(id, conn).orElseThrow();
