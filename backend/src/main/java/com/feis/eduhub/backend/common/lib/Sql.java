@@ -24,7 +24,7 @@ public class Sql {
      * 
      * @see PreparedStatement
      */
-    public static void setParams(PreparedStatement ps, List<Object> params) throws SQLException {
+    public static void setParams(PreparedStatement ps, List<? extends Object> params) throws SQLException {
         for (int i = 0; i < params.size(); i++) {
             ps.setObject(i + 1, params.get(i));
         }
