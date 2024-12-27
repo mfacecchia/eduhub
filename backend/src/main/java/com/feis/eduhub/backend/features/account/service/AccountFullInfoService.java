@@ -8,8 +8,11 @@ import java.util.NoSuchElementException;
 import com.feis.eduhub.backend.common.config.DatabaseConnection;
 import com.feis.eduhub.backend.common.exceptions.AppException;
 import com.feis.eduhub.backend.common.exceptions.DataFetchException;
+import com.feis.eduhub.backend.features.account.Account;
 import com.feis.eduhub.backend.features.account.dao.AccountFullInfoDao;
 import com.feis.eduhub.backend.features.account.dto.AccountFullInfoDto;
+import com.feis.eduhub.backend.features.credentials.Credentials;
+import com.feis.eduhub.backend.features.role.SystemRole;
 
 public class AccountFullInfoService {
     private final AccountFullInfoDao accountFullInfoDao;
@@ -54,5 +57,13 @@ public class AccountFullInfoService {
         } catch (SQLException e) {
             throw new DataFetchException("Could not fetch data", e);
         }
+    }
+
+    public static AccountFullInfoDto getDto(Account account, Credentials credentials, SystemRole systemRole) {
+        return new AccountFullInfoDto(
+                account.getAccountId(), account.getFirstName(),
+                account.getLastName(), credentials.getEmail(),
+                account.getIcon(), systemRole.getRoleId(),
+                systemRole.getRoleName());
     }
 }
