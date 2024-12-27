@@ -26,10 +26,32 @@ public class SystemClassController implements EndpointsRegister {
     public void registerEndpoints(Javalin app) {
         systemClassMiddleware.registerEndpoints(app);
 
+        app.get(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/<classId>", classInfoHandler());
         app.get(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/all", getJoinedClassesHandler());
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, createClass());
         app.put(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, updateClass());
         app.delete(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, deleteClass());
+    }
+
+    private Handler classInfoHandler() {
+        return (ctx) -> {
+            Long accountId = ctx.attribute("accountId");
+            Long classId;
+            try {
+                classId = Long.valueOf(ctx.pathParam("classId"));
+            } catch (NumberFormatException e) {
+                throw new ValidationException("Invalid classId", e);
+            }
+            if (classId <= 0) {
+                throw new ValidationException("Invalid classId");
+            }
+            ClassDto classDto = systemClassService.getSingleClassByAccountId(accountId, classId);
+            ResponseDto<ClassDto> response = new ResponseDto.ResponseBuilder<ClassDto>(200)
+                    .withMessage("Success")
+                    .withData(classDto)
+                    .build();
+            ctx.status(200).json(response);
+        };
     }
 
     private Handler getJoinedClassesHandler() {
