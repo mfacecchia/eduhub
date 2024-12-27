@@ -20,7 +20,7 @@ public final class SystemClassUtility {
                 json.optIntegerObject("classYear"),
                 json.optLongObject("teacherId"));
         if (includeId) {
-            systemClass.setClassId(json.getLong("classId"));
+            systemClass.setClassId(json.optLongObject("classId"));
         }
         return systemClass;
     }

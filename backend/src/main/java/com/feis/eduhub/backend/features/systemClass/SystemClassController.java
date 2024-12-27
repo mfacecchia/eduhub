@@ -46,7 +46,7 @@ public class SystemClassController implements EndpointsRegister {
             JSONObject json = new JSONObject(ctx.body());
             SystemClass systemClass = SystemClassUtility.getClassFromBody(json, true);
             Long classId = systemClass.getClassId();
-            if (classId == null) {
+            if (classId <= 0) {
                 throw new ValidationException("Invalid Class ID");
             }
             systemClassService.updateClass(classId, systemClass);
@@ -60,7 +60,10 @@ public class SystemClassController implements EndpointsRegister {
     private Handler deleteClass() {
         return (ctx) -> {
             JSONObject json = new JSONObject(ctx.body());
-            Long classId = json.getLong("classId");
+            Long classId = json.optLongObject("classId");
+            if (classId <= 0) {
+                throw new ValidationException("Invalid Class ID");
+            }
             systemClassService.deleteClass(classId);
             ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(200)
                     .withMessage("Class successfully deleted")
