@@ -61,7 +61,7 @@ public class IsLoggedInMiddleware {
                 if (token != null) {
                     JwtData jwtData = JsonWebToken.validateToken(token);
                     String result = jwtService.getJwt(jwtData.getJti());
-                    if ("nil".equals(result)) {
+                    if (result == null) {
                         throw new TokenValidationException("Invalid token");
                     }
                     if (sendResponseOnValidToken) {
