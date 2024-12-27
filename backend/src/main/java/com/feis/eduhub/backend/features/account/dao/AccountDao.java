@@ -13,7 +13,7 @@ import java.util.Optional;
 import com.feis.eduhub.backend.common.interfaces.dao.ModelDao;
 import com.feis.eduhub.backend.common.lib.Sql;
 import com.feis.eduhub.backend.features.account.Account;
-import com.feis.eduhub.backend.features.account.dto.AccountDto;
+import com.feis.eduhub.backend.features.account.dto.AccountAttendanceDto;
 
 public class AccountDao implements ModelDao<Account> {
     private final String TABLE_NAME = "account";
@@ -79,8 +79,8 @@ public class AccountDao implements ModelDao<Account> {
         ps.executeUpdate();
     }
 
-    public List<AccountDto> findAttendancesByLessonId(long id, Connection conn) throws SQLException {
-        List<AccountDto> attendancesList = new ArrayList<>();
+    public List<AccountAttendanceDto> findAttendancesByLessonId(long id, Connection conn) throws SQLException {
+        List<AccountAttendanceDto> attendancesList = new ArrayList<>();
         String query = String.format(
                 "SELECT account.account_id, first_name, last_name, icon, attended FROM \"%s\" INNER JOIN \"lesson_attendance\" ON lesson_attendance.account_id = account.account_id WHERE lesson_attendance.lesson_id = ?",
                 TABLE_NAME);
@@ -106,9 +106,9 @@ public class AccountDao implements ModelDao<Account> {
         }
     }
 
-    private AccountDto getDtoTableData(ResultSet rs) throws SQLException {
+    private AccountAttendanceDto getDtoTableData(ResultSet rs) throws SQLException {
         try {
-            return new AccountDto(
+            return new AccountAttendanceDto(
                     (Long) rs.getObject("account_id"),
                     rs.getString("first_name"),
                     rs.getString("last_name"),

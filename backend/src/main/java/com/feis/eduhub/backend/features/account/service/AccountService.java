@@ -12,7 +12,7 @@ import com.feis.eduhub.backend.common.exceptions.DatabaseQueryException;
 import com.feis.eduhub.backend.common.exceptions.NotFoundException;
 import com.feis.eduhub.backend.features.account.Account;
 import com.feis.eduhub.backend.features.account.dao.AccountDao;
-import com.feis.eduhub.backend.features.account.dto.AccountDto;
+import com.feis.eduhub.backend.features.account.dto.AccountAttendanceDto;
 import com.feis.eduhub.backend.features.account.dto.AccountFullInfoDto;
 import com.feis.eduhub.backend.features.credentials.Credentials;
 import com.feis.eduhub.backend.features.credentials.CredentialsDao;
@@ -22,11 +22,9 @@ import com.feis.eduhub.backend.features.role.SystemRoleService;
 
 /**
  * Service class responsible for managing account-related operations such as
- * functionalities for creating, reading, updating, and
- * deleting account information
- * through the use of the
- * {@link com.feis.eduhub.backend.features.account.dao.AccountDao AccountDao}
- * layer class.
+ * functionalities for creating, reading, updating, and deleting account
+ * information through the use of the
+ * {@link AccountDao} layer class.
  * 
  * @see AccountDao
  */
@@ -97,7 +95,7 @@ public class AccountService {
         }
     }
 
-    public List<AccountDto> getAllAttendancesByLessonId(long id) throws AppException {
+    public List<AccountAttendanceDto> getAllAttendancesByLessonId(long id) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             return accountDao.findAttendancesByLessonId(id, conn);
         } catch (SQLException e) {
