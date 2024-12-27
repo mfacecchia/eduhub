@@ -1,4 +1,4 @@
-package com.feis.eduhub.backend.features.account;
+package com.feis.eduhub.backend.features.account.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import com.feis.eduhub.backend.common.interfaces.dao.ModelDao;
 import com.feis.eduhub.backend.common.lib.Sql;
+import com.feis.eduhub.backend.features.account.Account;
 import com.feis.eduhub.backend.features.account.dto.AccountDto;
 
 public class AccountDao implements ModelDao<Account> {

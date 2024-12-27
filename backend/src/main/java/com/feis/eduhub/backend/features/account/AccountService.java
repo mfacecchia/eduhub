@@ -10,6 +10,7 @@ import com.feis.eduhub.backend.common.exceptions.AppException;
 import com.feis.eduhub.backend.common.exceptions.DataFetchException;
 import com.feis.eduhub.backend.common.exceptions.DatabaseQueryException;
 import com.feis.eduhub.backend.common.exceptions.NotFoundException;
+import com.feis.eduhub.backend.features.account.dao.AccountDao;
 import com.feis.eduhub.backend.features.account.dto.AccountDto;
 import com.feis.eduhub.backend.features.account.dto.AccountFullInfoDto;
 import com.feis.eduhub.backend.features.account.service.AccountFullInfoService;
@@ -24,7 +25,7 @@ import com.feis.eduhub.backend.features.role.SystemRoleService;
  * functionalities for creating, reading, updating, and
  * deleting account information
  * through the use of the
- * {@link com.feis.eduhub.backend.features.account.AccountDao AccountDao}
+ * {@link com.feis.eduhub.backend.features.account.dao.AccountDao AccountDao}
  * layer class.
  * 
  * @see AccountDao
