@@ -11,9 +11,13 @@ import com.feis.eduhub.backend.common.exceptions.DataFetchException;
 import com.feis.eduhub.backend.common.exceptions.DatabaseQueryException;
 import com.feis.eduhub.backend.common.exceptions.NotFoundException;
 import com.feis.eduhub.backend.features.account.dto.AccountDto;
+import com.feis.eduhub.backend.features.account.dto.AccountFullInfoDto;
+import com.feis.eduhub.backend.features.account.service.AccountFullInfoService;
 import com.feis.eduhub.backend.features.credentials.Credentials;
 import com.feis.eduhub.backend.features.credentials.CredentialsDao;
 import com.feis.eduhub.backend.features.credentials.CredentialsService;
+import com.feis.eduhub.backend.features.role.SystemRole;
+import com.feis.eduhub.backend.features.role.SystemRoleService;
 
 /**
  * Service class responsible for managing account-related operations such as
@@ -29,12 +33,14 @@ public class AccountService {
     private final AccountDao accountDao;
     private final CredentialsDao credentialsDao;
     private final CredentialsService credentialsService;
+    private final SystemRoleService systemRoleService;
     private final DatabaseConnection databaseConnection;
 
     public AccountService() {
         accountDao = new AccountDao();
         credentialsDao = new CredentialsDao();
         credentialsService = new CredentialsService();
+        systemRoleService = new SystemRoleService();
         databaseConnection = DatabaseConnection.getInstance();
     }
 
@@ -56,14 +62,15 @@ public class AccountService {
         }
     }
 
-    public Account createAccount(Account account, Credentials credentials) throws AppException {
+    public AccountFullInfoDto createAccount(Account account, Credentials credentials) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             try {
                 accountDao.create(account, conn);
                 credentialsService.updateCredentialsData(credentials, account);
                 credentialsDao.create(credentials, conn);
                 conn.commit();
-                return account;
+                SystemRole systemRole = systemRoleService.getRoleById(account.getRoleId());
+                return AccountFullInfoService.getDto(account, credentials, systemRole);
             } catch (SQLException e) {
                 conn.rollback();
                 throw new DatabaseQueryException("Could not create account", e);
