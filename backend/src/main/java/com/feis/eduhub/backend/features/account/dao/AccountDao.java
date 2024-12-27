@@ -62,7 +62,7 @@ public class AccountDao implements ModelDao<Account> {
     @Override
     public void update(long id, Account account, Connection conn) throws SQLException {
         String query = String.format(
-                "UPDATE \"%s\" SET first_name = COALESCE(?, first_name), last_name = COALESCE(?, last_name), icon = COALESCE(?, icon), role_id = COALESCE(?, role_id) WHERE account_id = ?",
+                "UPDATE \"%s\" SET first_name = ?, last_name = ?, icon = ?, role_id = ? WHERE account_id = ?",
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(account.getFirstName(),

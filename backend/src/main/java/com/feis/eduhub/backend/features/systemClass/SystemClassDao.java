@@ -75,7 +75,7 @@ public class SystemClassDao implements ModelDao<SystemClass> {
     @Override
     public void update(long id, SystemClass systemClass, Connection conn) throws SQLException {
         String query = String.format(
-                "UPDATE \"%s\" SET course_name = COALESCE(?, course_name), class_address = COALESCE(?, class_address), class_year = COALESCE(?, class_year), teacher_id = COALESCE(?, teacher_id) WHERE class_id = ?",
+                "UPDATE \"%s\" SET course_name = ?, class_address = ?, class_year = ?, teacher_id = ? WHERE class_id = ?",
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps,

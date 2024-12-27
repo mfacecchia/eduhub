@@ -72,7 +72,7 @@ public class CredentialsDao implements ModelDao<Credentials> {
     @Override
     public void update(long id, Credentials credentials, Connection conn) throws SQLException {
         String query = String.format(
-                "UPDATE \"%s\" SET email = COALESCE(?, email), password = COALESCE(?, password), updated_at = COALESCE(?, updated_at) WHERE credentials_id = ?",
+                "UPDATE \"%s\" SET email = ?, password = ?, updated_at = ? WHERE credentials_id = ?",
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(credentials.getEmail(),

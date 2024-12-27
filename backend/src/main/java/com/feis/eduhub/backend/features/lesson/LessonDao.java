@@ -73,7 +73,7 @@ public class LessonDao implements ModelDao<Lesson> {
     @Override
     public void update(long id, Lesson lesson, Connection conn) throws SQLException {
         String query = String.format(
-                "UPDATE \"%s\" SET lesson_date = COALESCE(?, lesson_date), starts_at = COALESCE(?, starts_at), ends_at = COALESCE(?, ends_at), room_no = COALESCE(?, room_no), account_id = COALESCE(?, account_id), class_id = COALESCE(?, class_id) WHERE lesson_id = ?",
+                "UPDATE \"%s\" SET lesson_date = ?, starts_at = ?, ends_at = ?, room_no = ?, account_id = ?, class_id = ? WHERE lesson_id = ?",
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(lesson.getLessonDate(), lesson.getStartsAt(), lesson.getEndsAt(),
