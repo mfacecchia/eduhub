@@ -10,13 +10,13 @@ import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
 import com.feis.eduhub.backend.common.lib.Hashing;
 import com.feis.eduhub.backend.features.account.Account;
 import com.feis.eduhub.backend.features.account.AccountService;
+import com.feis.eduhub.backend.features.account.dto.AccountFullInfoDto;
 import com.feis.eduhub.backend.features.auth.jwt.JsonWebToken;
 import com.feis.eduhub.backend.features.auth.jwt.JwtData;
 import com.feis.eduhub.backend.features.auth.jwt.JwtService;
 import com.feis.eduhub.backend.features.auth.jwt.errors.TokenGenerationException;
 import com.feis.eduhub.backend.features.credentials.Credentials;
 import com.feis.eduhub.backend.features.credentials.CredentialsService;
-import com.feis.eduhub.backend.features.user.UserDto;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -51,8 +51,8 @@ public class AuthController implements EndpointsRegister {
                 throw new ValidationException("No values provided.");
             }
             // TODO: Add data validation
-            UserDto user = createAccount(json);
-            ResponseDto<UserDto> response = new ResponseDto.ResponseBuilder<UserDto>(200)
+            AccountFullInfoDto user = createAccount(json);
+            ResponseDto<AccountFullInfoDto> response = new ResponseDto.ResponseBuilder<AccountFullInfoDto>(200)
                     .withMessage("User created successfully")
                     .withData(user)
                     .build();
@@ -73,11 +73,10 @@ public class AuthController implements EndpointsRegister {
         };
     }
 
-    private UserDto createAccount(JSONObject json) throws AppException {
+    private AccountFullInfoDto createAccount(JSONObject json) throws AppException {
         Account account = getAccountData(json);
         Credentials credentials = getCredentialsData(json);
-        accountService.createAccount(account, credentials);
-        return generateUser(account, credentials);
+        return accountService.createAccount(account, credentials);
     }
 
     private Account getAccountData(JSONObject json) throws ValidationException {
@@ -91,18 +90,6 @@ public class AuthController implements EndpointsRegister {
 
     private Credentials getCredentialsData(JSONObject json) {
         return new Credentials(json.getString("email"), json.getString("password"));
-    }
-
-    /**
-     * Generates a User object to be embed in HTTP response
-     * 
-     * @param account     the full account information object
-     * @param credentials the full credentials information object
-     * @return the generated User DTO
-     */
-    private UserDto generateUser(Account account, Credentials credentials) {
-        return new UserDto(account.getAccountId(), account.getFirstName(), account.getLastName(),
-                credentials.getEmail(), account.getIcon(), account.getRoleId());
     }
 
     private Credentials checkCredentials(JSONObject json) throws AppException {
