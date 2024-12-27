@@ -25,12 +25,14 @@ import io.javalin.http.Handler;
 import io.javalin.http.SameSite;
 
 public class AuthController implements EndpointsRegister {
-    private final String BASE_URL = "/auth";
+    private final String BASE_URL = AuthUtility.getBaseUrl();
+    private final AuthMiddleware authMiddleware;
     private final AccountService accountService;
     private final CredentialsService credentialsService;
     private final JwtService jwtService;
 
     public AuthController() {
+        authMiddleware = new AuthMiddleware();
         accountService = new AccountService();
         credentialsService = new CredentialsService();
         jwtService = new JwtService();
@@ -38,8 +40,8 @@ public class AuthController implements EndpointsRegister {
 
     @Override
     public void registerEndpoints(Javalin app) {
-        app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/*",
-                AuthMiddleware.isLoggedIn(false, true, false));
+        authMiddleware.registerEndpoints(app);
+
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/login", loginHandler());
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/signup", signupHandler());
     }
