@@ -39,7 +39,7 @@ public class SystemClassMiddleware implements EndpointsRegister {
         app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL,
                 MiddlewareExecutor.executeOnMethod(
                         EnumSet.allOf(HandlerType.class),
-                        IsLoggedInMiddleware.isLoggedIn(true, false, true)));
+                        IsLoggedInMiddleware.isLoggedIn(true, false, true, false)));
 
         app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL,
                 MiddlewareExecutor.executeOnMethod(

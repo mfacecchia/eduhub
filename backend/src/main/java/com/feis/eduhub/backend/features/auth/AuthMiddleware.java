@@ -26,12 +26,12 @@ public class AuthMiddleware implements EndpointsRegister {
         app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/login",
                 MiddlewareExecutor.executeOnMethod(
                         EnumSet.of(HandlerType.POST),
-                        IsLoggedInMiddleware.isLoggedIn(false, true, false)));
+                        IsLoggedInMiddleware.isLoggedIn(false, true, false, false)));
 
         app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/signup",
                 MiddlewareExecutor.executeOnMethod(
                         EnumSet.of(HandlerType.POST),
-                        IsLoggedInMiddleware.isLoggedIn(true, false, true)));
+                        IsLoggedInMiddleware.isLoggedIn(true, false, true, false)));
 
         app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/logout",
                 MiddlewareExecutor.executeOnMethod(
