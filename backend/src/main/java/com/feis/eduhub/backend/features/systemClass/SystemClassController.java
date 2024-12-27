@@ -1,10 +1,13 @@
 package com.feis.eduhub.backend.features.systemClass;
 
+import java.util.List;
+
 import org.json.JSONObject;
 
 import com.feis.eduhub.backend.common.dto.ResponseDto;
 import com.feis.eduhub.backend.common.exceptions.ValidationException;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
+import com.feis.eduhub.backend.features.accountClass.dto.ClassDto;
 
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
@@ -23,9 +26,22 @@ public class SystemClassController implements EndpointsRegister {
     public void registerEndpoints(Javalin app) {
         systemClassMiddleware.registerEndpoints(app);
 
+        app.get(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/all", getJoinedClassesHandler());
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, createClass());
         app.put(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, updateClass());
         app.delete(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, deleteClass());
+    }
+
+    private Handler getJoinedClassesHandler() {
+        return (ctx) -> {
+            Long accountId = ctx.attribute("accountId");
+            List<ClassDto> classesList = systemClassService.getClassesByAccountId(accountId);
+            ResponseDto<List<ClassDto>> response = new ResponseDto.ResponseBuilder<List<ClassDto>>(200)
+                    .withMessage("Success")
+                    .withData(classesList)
+                    .build();
+            ctx.status(200).json(response);
+        };
     }
 
     private Handler createClass() {
