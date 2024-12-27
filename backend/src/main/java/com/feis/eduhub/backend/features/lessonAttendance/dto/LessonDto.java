@@ -14,5 +14,5 @@ public class LessonDto {
     private Time startsAt;
     private Time endsAt;
     private Integer roomNo;
-    private final Boolean attended;
+    private Boolean attended;
 }
