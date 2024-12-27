@@ -10,10 +10,10 @@ import java.util.Optional;
  * DTO classes (which, by definition, don't need to implement any data
  * manipulation operation).
  * 
- * @param <T1> The type of entity this DAO handles
+ * @param <T> The type of entity this DAO handles
  */
-public interface Dao<T1> {
-    Optional<T1> findById(long id, Connection conn) throws SQLException;
+public interface SimpleDatabaseReadDao<T> {
+    Optional<T> findById(long ids, Connection conn) throws SQLException;
 
-    List<T1> getAll(Connection conn) throws SQLException;
+    List<T> getAll(Connection conn) throws SQLException;
 }
