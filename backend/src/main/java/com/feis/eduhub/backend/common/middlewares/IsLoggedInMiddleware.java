@@ -7,6 +7,7 @@ import com.feis.eduhub.backend.features.auth.jwt.JwtData;
 import com.feis.eduhub.backend.features.auth.jwt.JwtService;
 import com.feis.eduhub.backend.features.auth.jwt.errors.TokenValidationException;
 
+import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.http.UnauthorizedResponse;
 
@@ -62,6 +63,7 @@ public class IsLoggedInMiddleware {
                     JwtData jwtData = JsonWebToken.validateToken(token);
                     String result = jwtService.getJwt(jwtData.getJti());
                     if (result == null) {
+                        removeAuthCookie(ctx);
                         throw new TokenValidationException("Invalid token");
                     }
                     if (sendResponseOnValidToken) {
@@ -72,8 +74,13 @@ public class IsLoggedInMiddleware {
                     }
                 }
             } catch (JWTVerificationException e) {
+                removeAuthCookie(ctx);
                 throw new TokenValidationException("Invalid token");
             }
         };
+    }
+
+    private static void removeAuthCookie(Context ctx) {
+        ctx.removeCookie("sessionId");
     }
 }
