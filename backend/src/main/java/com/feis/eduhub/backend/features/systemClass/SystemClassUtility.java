@@ -13,13 +13,12 @@ public final class SystemClassUtility {
     private SystemClassUtility() {
     }
 
-    // TODO: Add option to not throw if field not found (useful for PUT requests)
     public static SystemClass getClassFromBody(JSONObject json, boolean includeId) {
         SystemClass systemClass = new SystemClass(
-                json.getString("courseName"),
-                json.getString("classAddress"),
-                json.getInt("classYear"),
-                json.getLong("teacherId"));
+                json.optString("courseName"),
+                json.optString("classAddress"),
+                json.optIntegerObject("classYear"),
+                json.optLongObject("teacherId"));
         if (includeId) {
             systemClass.setClassId(json.getLong("classId"));
         }
