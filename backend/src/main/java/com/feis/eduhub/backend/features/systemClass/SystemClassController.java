@@ -11,14 +11,18 @@ import io.javalin.http.Handler;
 
 public class SystemClassController implements EndpointsRegister {
     private final String BASE_URL = SystemClassUtility.getBaseUrl();
+    private final SystemClassMiddleware systemClassMiddleware;
     private final SystemClassService systemClassService;
 
     public SystemClassController() {
         systemClassService = new SystemClassService();
+        systemClassMiddleware = new SystemClassMiddleware();
     }
 
     @Override
     public void registerEndpoints(Javalin app) {
+        systemClassMiddleware.registerEndpoints(app);
+
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, createClass());
         app.put(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, updateClass());
         app.delete(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, deleteClass());
