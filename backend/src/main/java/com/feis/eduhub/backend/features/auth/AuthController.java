@@ -44,6 +44,7 @@ public class AuthController implements EndpointsRegister {
 
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/login", loginHandler());
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/signup", signupHandler());
+        app.get(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/logout", logoutHandler());
     }
 
     private Handler signupHandler() {
@@ -73,6 +74,27 @@ public class AuthController implements EndpointsRegister {
             setJwtCookie(ctx, jwtData);
             ctx.status(200).result("Authenticated");
         };
+    }
+
+    private Handler logoutHandler() {
+        return (ctx) -> {
+            JwtData jwtData = getJwtFromContextObject(ctx);
+            jwtService.deleteJwt(jwtData.getJti());
+            ctx.removeCookie("sessionId");
+            ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(200)
+                    .withMessage("Successfully logged out")
+                    .build();
+            ctx.status(200).json(response);
+        };
+    }
+
+    private JwtData getJwtFromContextObject(Context ctx) throws AppException {
+        Object attribute = ctx.attribute("jwtData");
+        if (!(attribute instanceof JwtData)) {
+            throw new AppException(400, "Unknown error while logging out",
+                    new ClassCastException("Invalid JWT type in context attribute"));
+        }
+        return (JwtData) attribute;
     }
 
     private AccountFullInfoDto createAccount(JSONObject json) throws AppException {
