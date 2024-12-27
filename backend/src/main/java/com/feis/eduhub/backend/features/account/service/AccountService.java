@@ -82,6 +82,7 @@ public class AccountService {
     public void updateAccount(long accountId, Account account) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             accountDao.update(accountId, account, conn);
+            conn.commit();
         } catch (SQLException e) {
             throw new DatabaseQueryException("Error while updating account", e);
         }
@@ -90,6 +91,7 @@ public class AccountService {
     public void deleteAccount(long accountId) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             accountDao.delete(accountId, conn);
+            conn.commit();
         } catch (SQLException e) {
             throw new DatabaseQueryException("Error while deleting account", e);
         }
