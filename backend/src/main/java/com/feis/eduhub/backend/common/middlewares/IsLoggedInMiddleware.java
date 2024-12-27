@@ -80,6 +80,39 @@ public class IsLoggedInMiddleware {
         };
     }
 
+    // WIP: will replace the previous method
+    public static Handler isLoggedIn(boolean strict, boolean sendResponseOnValidToken,
+            boolean setAccountId, boolean setJwt) {
+        return (ctx) -> {
+            try {
+                String token = ctx.cookie("sessionId");
+                if (token == null && strict) {
+                    throw new TokenValidationException("Missing or invalid token");
+                }
+                if (token != null) {
+                    JwtData jwtData = JsonWebToken.validateToken(token);
+                    String result = jwtService.getJwt(jwtData.getJti());
+                    if (result == null) {
+                        removeAuthCookie(ctx);
+                        throw new TokenValidationException("Invalid token");
+                    }
+                    if (sendResponseOnValidToken) {
+                        throw new AlreadyAuthenticatedException("Already logged in");
+                    }
+                    if (setAccountId) {
+                        ctx.attribute("accountId", jwtData.getAccountId());
+                    }
+                    if (setJwt) {
+                        ctx.attribute("jwtData", jwtData);
+                    }
+                }
+            } catch (JWTVerificationException e) {
+                removeAuthCookie(ctx);
+                throw new TokenValidationException("Invalid token");
+            }
+        };
+    }
+
     private static void removeAuthCookie(Context ctx) {
         ctx.removeCookie("sessionId");
     }
