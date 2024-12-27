@@ -15,7 +15,7 @@ public class AccountUtility {
                 json.optString("icon"),
                 json.optLongObject("roleId"));
         if (includeId) {
-            account.setAccountId(json.getLong("accountId"));
+            account.setAccountId(json.optLongObject("accountId"));
         }
         return account;
     }
