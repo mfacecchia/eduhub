@@ -25,11 +25,11 @@ import io.javalin.http.HandlerType;
  * @see Rbac
  * @see AuthMiddleware
  */
-public class SystemClassMiddlewares implements EndpointsRegister {
+public class SystemClassMiddleware implements EndpointsRegister {
     private final String BASE_URL = SystemClassUtility.getBaseUrl();
     private final Rbac rbac;
 
-    public SystemClassMiddlewares() {
+    public SystemClassMiddleware() {
         rbac = new Rbac();
     }
 
