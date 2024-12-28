@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.feis.eduhub.backend.common.config.AppBuilder;
 import com.feis.eduhub.backend.features.account.AccountController;
+import com.feis.eduhub.backend.features.accountClass.controller.ClassMemberController;
 import com.feis.eduhub.backend.features.auth.AuthController;
 import com.feis.eduhub.backend.features.systemClass.SystemClassController;
 
@@ -13,7 +14,7 @@ public class App {
                 Arrays.asList(
                         new AuthController(),
                         new AccountController(),
-                        new SystemClassController()));
+                        new SystemClassController(), new ClassMemberController()));
         appBuilder.configureEndpoints(true);
         appBuilder.start();
     }
