@@ -35,7 +35,7 @@ public class ClassMemberDao implements JoinDatabaseReadDao<ClassMemberDto> {
     @Override
     public List<ClassMemberDto> getAll(long id, Connection conn) throws SQLException {
         List<ClassMemberDto> membersList = new ArrayList<>();
-        String query = String.format("SELECT %s FROM system_class %s WHERE class_id = ?",
+        String query = String.format("SELECT %s FROM system_class %s WHERE system_class.class_id = ?",
                 DATABASE_FIELDS, JOIN_QUERIES);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, asList(id));
