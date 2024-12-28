@@ -72,7 +72,10 @@ public class AuthController implements EndpointsRegister {
             Credentials storedCredentials = checkCredentials(json);
             JwtData jwtData = setJwt(storedCredentials, json.optBoolean("rememberMe"));
             setJwtCookie(ctx, jwtData);
-            ctx.status(200).result("Authenticated");
+            ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(200)
+                    .withMessage("Successfully authenticated")
+                    .build();
+            ctx.status(200).json(response);
         };
     }
 
