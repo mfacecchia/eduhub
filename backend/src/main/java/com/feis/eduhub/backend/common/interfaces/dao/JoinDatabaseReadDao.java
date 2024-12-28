@@ -36,5 +36,5 @@ public interface JoinDatabaseReadDao<T> {
      *         the executed query
      * @throws SQLException
      */
-    List<T> getAll(Long id, Connection conn) throws SQLException;
+    List<T> getAll(long id, Connection conn) throws SQLException;
 }
