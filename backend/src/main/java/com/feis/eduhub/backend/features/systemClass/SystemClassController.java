@@ -26,7 +26,7 @@ public class SystemClassController implements EndpointsRegister {
     public void registerEndpoints(Javalin app) {
         systemClassMiddleware.registerEndpoints(app);
 
-        app.get(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/<classId>", classInfoHandler());
+        app.get(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/{classId}/", classInfoHandler());
         app.get(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/all", getJoinedClassesHandler());
         app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, createClass());
         app.put(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, updateClass());
