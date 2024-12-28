@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.feis.eduhub.backend.common.exceptions.AppException;
+import com.feis.eduhub.backend.common.lib.UserRolesConstants;
 import com.feis.eduhub.backend.features.account.Account;
 import com.feis.eduhub.backend.features.account.service.AccountService;
 
@@ -22,8 +23,7 @@ import com.feis.eduhub.backend.features.account.service.AccountService;
  * @see AppAction
  */
 public class Rbac {
-    private final Map<Long, UserRole> userRolesMap = Map.of(1L, UserRole.ADMIN, 2L, UserRole.TEACHER, 3L,
-            UserRole.STUDENT);
+    private final Map<Long, UserRole> userRolesMap = UserRolesConstants.userRolesMap;
     private final AccountService accountService;
 
     public Rbac() {
