@@ -1,6 +1,6 @@
-import Label from "@/components/common/label";
 import { cn } from "@/lib/utils";
 import { ComponentProps, forwardRef } from "react";
+import Label from "./Label";
 
 type TInputProps = {
     label?: string;
