@@ -1,11 +1,12 @@
 import { Button } from "@/components/common/Button";
 import Container from "@/components/common/Container";
 import NotFound from "@/components/icons/NotFound";
+import updatePageTitle from "@/lib/titleUpdater";
 import { LucideHome } from "lucide-react";
 import { NavLink } from "react-router";
 
 const NotFoundPage = () => {
-    document.title = import.meta.env.VITE_PAGE_TITLE + " - Not found";
+    updatePageTitle("Not found");
     return (
         <Container>
             <NotFound />

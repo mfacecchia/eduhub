@@ -1,5 +1,7 @@
+import updatePageTitle from "@/lib/titleUpdater";
+
 const LandingPage = () => {
-    document.title = import.meta.env.VITE_PAGE_TITLE;
+    updatePageTitle("Home");
 
     return (
         <section>
