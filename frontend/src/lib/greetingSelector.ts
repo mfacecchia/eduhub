@@ -14,7 +14,11 @@ const greetings: TGreetings[] = [
     },
     {
         greeting: "Good Evening",
-        timeRange: [18, 5],
+        timeRange: [18, 24],
+    },
+    {
+        greeting: "Good Evening",
+        timeRange: [0, 5],
     },
 ];
 
