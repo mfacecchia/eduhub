@@ -82,6 +82,9 @@
     code {
         @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
     }
+    a {
+        @apply hover:animate-pulse;
+    }
     .lead {
         @apply text-xl text-muted-foreground;
     }
@@ -98,6 +101,9 @@
 
 #root {
     @apply p-4 overflow-x-hidden min-h-screen flex flex-col;
+}
+#root:has(nav) {
+    @apply pt-20;
 }
 footer {
     @apply mt-auto;
