@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router";
 import BackButton from "./components/common/BackButton";
 import MainLayout from "./layouts/MainLayout";
+import DashboardPage from "./pages/DashboardPage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -15,6 +16,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<MainLayout />}>
                         <Route index element={<LandingPage />} />
+                        <Route path="dashboard" element={<DashboardPage />} />
                     </Route>
                     <Route path="login">
                         <Route element={<BackButton />}>
