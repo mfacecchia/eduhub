@@ -9,9 +9,10 @@ const Footer = () => {
                 <Link to="/about">About</Link>
                 <VerticalSeparator className="h-3/4" />
                 <Link to="/legal">Legal</Link>
-                <VerticalSeparator />
+                <VerticalSeparator className="h-3/4" />
                 <Link
                     to="https://github.com/mfacecchia"
+                    target="_blank"
                     className="flex items-center gap-1"
                 >
                     Contacts <ExternalLink className="size-4" />
