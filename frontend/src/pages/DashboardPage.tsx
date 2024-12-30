@@ -1,4 +1,10 @@
 import { fetchAccount } from "@/api/accountApi";
+import ClassCard from "@/components/ClassCard";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+} from "@/components/common/carousel";
 import Section from "@/components/common/Section";
 import LessonCard from "@/components/LessonCard";
 import getGreeting from "@/lib/greetingSelector";
@@ -20,7 +26,7 @@ const DashboardPage = () => {
                 <p className="large">{greeting ?? "Hello"},</p>
                 <h2>{isAccountLoading ? "Loading..." : accountData?.name}</h2>
             </section>
-            <main>
+            <main className="mb-11">
                 <Section>
                     <div className="flex items-center justify-between py-3">
                         <h4>Next Lesson</h4>
@@ -42,7 +48,41 @@ const DashboardPage = () => {
                     />
                 </Section>
                 <Section>
-                    <h4>Courses</h4>
+                    <div className="py-3">
+                        <h4>Courses</h4>
+                    </div>
+                    <Carousel
+                        opts={{
+                            align: "start",
+                        }}
+                    >
+                        {/* TODO: Replace mock data with actual classes from backend */}
+                        <CarouselContent className="-ml-2">
+                            <CarouselItem className="basis-[45%] pl-2">
+                                <ClassCard
+                                    courseName="Java"
+                                    linkToClass="/classes/2"
+                                    teacherName="John Doe"
+                                />
+                            </CarouselItem>
+                            <CarouselItem className="basis-[45%] pl-2">
+                                <ClassCard
+                                    courseName="React.JS"
+                                    linkToClass="./"
+                                    teacherName="John Doe"
+                                    teacherAvatarUrl="https://picsum.photos/100"
+                                />
+                            </CarouselItem>
+                            <CarouselItem className="basis-[45%] pl-2">
+                                <ClassCard
+                                    courseName="React.JS"
+                                    linkToClass="./"
+                                    teacherName="John Doe"
+                                    teacherAvatarUrl="https://picsum.photos/100"
+                                />
+                            </CarouselItem>
+                        </CarouselContent>
+                    </Carousel>
                 </Section>
             </main>
         </>
