@@ -1,4 +1,4 @@
-import { getAccountInitialsFullName } from "@/lib/AccountInitials";
+import { getAccountInitialsFullName } from "@/lib/accountInitials";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router";
 import { Avatar, AvatarFallback, AvatarImage } from "./common/Avatar";
@@ -18,7 +18,7 @@ const ClassCard = ({
     linkToClass,
 }: TClassCardProps) => {
     return (
-        <Link to={linkToClass} className="hover:animate-none">
+        <Link to={linkToClass}>
             <Card className="bg-gradient-to-tr from-[#D4145A] to-[#FBB03B] text-primary-foreground aspect-[3/4] flex flex-col justify-between">
                 <CardHeader>
                     <CardTitle className="flex justify-between">

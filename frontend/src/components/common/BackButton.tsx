@@ -17,12 +17,12 @@ export default function BackButton({
 }: Omit<TBackButtonProps, "href">) {
     return (
         <>
-            <div>
+            <div className="pb-5">
                 <Link
                     to={urlTo ?? "../"}
                     className={cn(
                         buttonVariants({ variant: "outline" }),
-                        "gap-1 pl-2 hover:animate-none",
+                        "gap-1 pl-2",
                         className
                     )}
                     {...props}
