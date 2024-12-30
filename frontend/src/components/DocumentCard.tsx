@@ -24,7 +24,6 @@ const DocumentCard = ({
                 <CardHeader>
                     <CardTitle className="flex justify-between">
                         <div className="flex items-center gap-1 max-w-[80%] text-wrap">
-                            <File className="size-5" />
                             {fileName}
                         </div>
                         {docType.toLowerCase() === "link" ? (
