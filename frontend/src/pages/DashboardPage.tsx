@@ -8,15 +8,17 @@ import {
 import Section from "@/components/common/Section";
 import LessonCard from "@/components/LessonCard";
 import getGreeting from "@/lib/greetingSelector";
+import { TDbAccount } from "@/types/account";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router";
 
 const DashboardPage = () => {
-    const { data: accountData, isLoading: isAccountLoading } = useQuery({
-        queryKey: ["account"],
-        queryFn: fetchAccount,
-    });
+    const { data: accountData, isLoading: isAccountLoading } =
+        useQuery<TDbAccount>({
+            queryKey: ["account"],
+            queryFn: fetchAccount,
+        });
     const greeting = getGreeting();
 
     // TODO: Display an error in case of failed fetch
@@ -24,7 +26,13 @@ const DashboardPage = () => {
         <>
             <section>
                 <p className="large">{greeting ?? "Hello"},</p>
-                <h2>{isAccountLoading ? "Loading..." : accountData?.name}</h2>
+                <h2>
+                    {isAccountLoading
+                        ? "Loading..."
+                        : accountData?.id
+                        ? `${accountData?.firstName} ${accountData?.lastName}`
+                        : "User"}
+                </h2>
             </section>
             <main className="mb-11">
                 <Section>
