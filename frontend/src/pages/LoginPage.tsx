@@ -17,7 +17,7 @@ const LoginPage = () => {
         reValidateMode: "onBlur",
     });
 
-    function signupHandler(formData: TAccount) {
+    function loginHandler(formData: TAccount) {
         console.log("Submitting data");
         console.log(formData);
         setTimeout(() => {
@@ -27,7 +27,7 @@ const LoginPage = () => {
 
     return (
         <Container className="text-left">
-            <Form className="px-0" onSubmit={handleSubmit(signupHandler)}>
+            <Form className="px-0" onSubmit={handleSubmit(loginHandler)}>
                 <div>
                     <p className="large">EduHub</p>
                     <h2>Login</h2>
