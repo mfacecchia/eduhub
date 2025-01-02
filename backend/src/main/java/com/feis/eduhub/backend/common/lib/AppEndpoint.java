@@ -9,9 +9,9 @@ package com.feis.eduhub.backend.common.lib;
 public enum AppEndpoint {
     DEFAULT_V1("/api/v1"),
     AUTH("/auth"),
-    ACCOUNT("/account"),
-    CLASS("/class"),
-    LESSON("/lesson");
+    ACCOUNT("/accounts"),
+    CLASS("/classes"),
+    LESSON("/lessons");
 
     private final String BASE_URL;
 
