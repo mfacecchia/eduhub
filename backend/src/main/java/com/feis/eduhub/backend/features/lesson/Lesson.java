@@ -3,6 +3,8 @@ package com.feis.eduhub.backend.features.lesson;
 import java.sql.Date;
 import java.sql.Time;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.NonNull;
 public class Lesson {
     @NonNull
     private Long lessonId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @NonNull
     private Date lessonDate;
     @NonNull
