@@ -1,12 +1,11 @@
 package com.feis.eduhub.backend.features.accountClass;
 
-import static java.util.Arrays.asList;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +37,36 @@ public class ClassMemberDao implements JoinDatabaseReadDao<ClassMemberDto> {
         String query = String.format("SELECT %s FROM system_class %s WHERE system_class.class_id = ?",
                 DATABASE_FIELDS, JOIN_QUERIES);
         PreparedStatement ps = conn.prepareStatement(query);
-        Sql.setParams(ps, asList(id));
+        Sql.setParams(ps, Arrays.asList(id));
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            membersList.add(getTableData(rs));
+        }
+        return membersList;
+    }
+
+    public List<ClassMemberDto> getAllByLessonId(long id, Connection conn) throws SQLException {
+        List<ClassMemberDto> membersList = new ArrayList<>();
+        String query = String.format(
+                "SELECT %s FROM system_class %s INNER JOIN lesson ON lesson.class_id = system_class.class_id WHERE lesson.lesson_id = ?",
+                DATABASE_FIELDS, JOIN_QUERIES);
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(id));
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            membersList.add(getTableData(rs));
+        }
+        return membersList;
+    }
+
+    public List<ClassMemberDto> getAllByClassIdAndRoleId(long classId, long roleId, Connection conn)
+            throws SQLException {
+        List<ClassMemberDto> membersList = new ArrayList<>();
+        String query = String.format(
+                "SELECT %s FROM system_class %s WHERE system_class.class_id = ? AND account.role_id = ?",
+                DATABASE_FIELDS, JOIN_QUERIES);
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(classId, roleId));
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             membersList.add(getTableData(rs));
