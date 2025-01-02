@@ -57,11 +57,11 @@ public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDa
     @Override
     public Lesson create(Lesson lesson, Connection conn) throws SQLException {
         String query = String.format(
-                "INSERT INTO \"%s\" (lesson_date, starts_at, ends_at, room_no, account_id, class_id) VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO \"%s\" (lesson_date, starts_at, ends_at, room_no, class_id) VALUES (?, ?, ?, ?, ?)",
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         Sql.setParams(ps, Arrays.asList(lesson.getLessonDate(), lesson.getStartsAt(), lesson.getEndsAt(),
-                lesson.getRoomNo(), lesson.getCreatedById(), lesson.getClassId()));
+                lesson.getRoomNo(), lesson.getClassId()));
         ps.executeUpdate();
         ResultSet generatedKeys = ps.getGeneratedKeys();
         if (!generatedKeys.next()) {
@@ -74,7 +74,7 @@ public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDa
     @Override
     public void update(long id, Lesson lesson, Connection conn) throws SQLException {
         String query = String.format(
-                "UPDATE \"%s\" SET lesson_date = ?, starts_at = ?, ends_at = ?, room_no = ?, account_id = ?, class_id = ? WHERE lesson_id = ?",
+                "UPDATE \"%s\" SET lesson_date = ?, starts_at = ?, ends_at = ?, room_no = ?, class_id = ? WHERE lesson_id = ?",
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(lesson.getLessonDate(), lesson.getStartsAt(), lesson.getEndsAt(),
