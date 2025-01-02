@@ -30,6 +30,22 @@ public class ClassMemberService {
         }
     }
 
+    public List<ClassMemberDto> getAllClassMembersByLessonId(long lessonId) throws AppException {
+        try (Connection conn = databaseConnection.getConnection()) {
+            return classMemberDao.getAllByLessonId(lessonId, conn);
+        } catch (SQLException e) {
+            throw new DataFetchException("Could not fetch data", e);
+        }
+    }
+
+    public List<ClassMemberDto> getAllClassMembersByClassIdAndRoleId(long classId, long roleId) throws AppException {
+        try (Connection conn = databaseConnection.getConnection()) {
+            return classMemberDao.getAllByClassIdAndRoleId(classId, roleId, conn);
+        } catch (SQLException e) {
+            throw new DataFetchException("Could not fetch data", e);
+        }
+    }
+
     public ClassMemberDto getSingleClassMember(long classId, long accountId) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             return classMemberDao.findByIds(Arrays.asList(classId, accountId), conn).get();
