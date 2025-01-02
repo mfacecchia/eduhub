@@ -2,13 +2,15 @@ package com.feis.eduhub.backend.features.systemClass;
 
 import org.json.JSONObject;
 
+import com.feis.eduhub.backend.common.lib.AppEndpoint;
+
 /**
  * Utility class providing helper methods for SystemClass operations.
  * 
  * @see SystemClass
  */
 public final class SystemClassUtility {
-    private static final String BASE_URL = "/class";
+    private static final String BASE_URL = AppEndpoint.DEFAULT_V1.getBaseUrl() + AppEndpoint.CLASS.getBaseUrl();
 
     private SystemClassUtility() {
     }

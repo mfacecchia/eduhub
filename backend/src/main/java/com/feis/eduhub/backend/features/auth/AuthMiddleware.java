@@ -4,6 +4,7 @@ import java.util.EnumSet;
 
 import com.feis.eduhub.backend.common.exceptions.UnauthorizedException;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
+import com.feis.eduhub.backend.common.lib.AppEndpoint;
 import com.feis.eduhub.backend.common.lib.MiddlewareExecutor;
 import com.feis.eduhub.backend.common.middlewares.IsLoggedInMiddleware;
 import com.feis.eduhub.backend.common.rbac.AppAction;
@@ -14,7 +15,7 @@ import io.javalin.http.Handler;
 import io.javalin.http.HandlerType;
 
 public class AuthMiddleware implements EndpointsRegister {
-    private final String BASE_URL = AuthUtility.getBaseUrl();
+    private final String BASE_URL = AppEndpoint.DEFAULT_V1.getBaseUrl() + AppEndpoint.AUTH.getBaseUrl();
     private final Rbac rbac;
 
     public AuthMiddleware() {
@@ -23,22 +24,22 @@ public class AuthMiddleware implements EndpointsRegister {
 
     @Override
     public void registerEndpoints(Javalin app) {
-        app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/login",
+        app.before(BASE_URL + "/login",
                 MiddlewareExecutor.executeOnMethod(
                         EnumSet.of(HandlerType.POST),
                         IsLoggedInMiddleware.isLoggedIn(false, true, false, false)));
 
-        app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/signup",
+        app.before(BASE_URL + "/signup",
                 MiddlewareExecutor.executeOnMethod(
                         EnumSet.of(HandlerType.POST),
                         IsLoggedInMiddleware.isLoggedIn(true, false, true, false)));
 
-        app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/logout",
+        app.before(BASE_URL + "/logout",
                 MiddlewareExecutor.executeOnMethod(
                         EnumSet.of(HandlerType.GET),
                         IsLoggedInMiddleware.isLoggedIn(true, false, true, true)));
 
-        app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/signup",
+        app.before(BASE_URL + "/signup",
                 MiddlewareExecutor.executeOnMethod(
                         EnumSet.of(HandlerType.POST),
                         isAllowed()));

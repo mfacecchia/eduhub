@@ -7,13 +7,14 @@ import org.json.JSONObject;
 import com.feis.eduhub.backend.common.dto.ResponseDto;
 import com.feis.eduhub.backend.common.exceptions.ValidationException;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
+import com.feis.eduhub.backend.common.lib.AppEndpoint;
 import com.feis.eduhub.backend.features.accountClass.dto.ClassDto;
 
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 
 public class SystemClassController implements EndpointsRegister {
-    private final String BASE_URL = SystemClassUtility.getBaseUrl();
+    private final String BASE_URL = AppEndpoint.DEFAULT_V1.getBaseUrl() + AppEndpoint.CLASS.getBaseUrl();
     private final SystemClassMiddleware systemClassMiddleware;
     private final SystemClassService systemClassService;
 
@@ -26,11 +27,11 @@ public class SystemClassController implements EndpointsRegister {
     public void registerEndpoints(Javalin app) {
         systemClassMiddleware.registerEndpoints(app);
 
-        app.get(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/{classId}/", classInfoHandler());
-        app.get(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/all", getJoinedClassesHandler());
-        app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, createClass());
-        app.put(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, updateClass());
-        app.delete(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, deleteClass());
+        app.get(BASE_URL, getJoinedClassesHandler());
+        app.get(BASE_URL + "/{classId}", classInfoHandler());
+        app.post(BASE_URL, createClass());
+        app.put(BASE_URL, updateClass());
+        app.delete(BASE_URL, deleteClass());
     }
 
     private Handler classInfoHandler() {

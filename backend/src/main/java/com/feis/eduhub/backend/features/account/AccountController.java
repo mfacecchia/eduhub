@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import com.feis.eduhub.backend.common.dto.ResponseDto;
 import com.feis.eduhub.backend.common.exceptions.ValidationException;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
+import com.feis.eduhub.backend.common.lib.AppEndpoint;
 import com.feis.eduhub.backend.features.account.dto.AccountFullInfoDto;
 import com.feis.eduhub.backend.features.account.service.AccountFullInfoService;
 import com.feis.eduhub.backend.features.account.service.AccountService;
@@ -13,7 +14,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Handler;
 
 public class AccountController implements EndpointsRegister {
-    private final String BASE_URL = AccountUtility.getBaseUrl();
+    private final String BASE_URL = AppEndpoint.DEFAULT_V1.getBaseUrl() + AppEndpoint.ACCOUNT.getBaseUrl();
     private final AccountMiddleware accountMiddleware;
     private final AccountService accountService;
     private final AccountFullInfoService accountFullInfoService;
@@ -28,9 +29,9 @@ public class AccountController implements EndpointsRegister {
     public void registerEndpoints(Javalin app) {
         accountMiddleware.registerEndpoints(app);
 
-        app.get(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, accountInfoHandler());
-        app.put(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, accountUpdateHandler());
-        app.delete(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL, accountDeleteHandler());
+        app.get(BASE_URL, accountInfoHandler());
+        app.put(BASE_URL, accountUpdateHandler());
+        app.delete(BASE_URL, accountDeleteHandler());
     }
 
     private Handler accountInfoHandler() {

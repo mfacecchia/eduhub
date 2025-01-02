@@ -2,8 +2,10 @@ package com.feis.eduhub.backend.features.account;
 
 import org.json.JSONObject;
 
+import com.feis.eduhub.backend.common.lib.AppEndpoint;
+
 public class AccountUtility {
-    private static final String BASE_URL = "/account";
+    private static final String BASE_URL = AppEndpoint.DEFAULT_V1.getBaseUrl() + AppEndpoint.ACCOUNT.getBaseUrl();
 
     private AccountUtility() {
     }

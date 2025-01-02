@@ -7,6 +7,7 @@ import com.feis.eduhub.backend.common.exceptions.AppException;
 import com.feis.eduhub.backend.common.exceptions.InvalidCredentialsException;
 import com.feis.eduhub.backend.common.exceptions.ValidationException;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
+import com.feis.eduhub.backend.common.lib.AppEndpoint;
 import com.feis.eduhub.backend.common.lib.Hashing;
 import com.feis.eduhub.backend.features.account.Account;
 import com.feis.eduhub.backend.features.account.dto.AccountFullInfoDto;
@@ -25,7 +26,7 @@ import io.javalin.http.Handler;
 import io.javalin.http.SameSite;
 
 public class AuthController implements EndpointsRegister {
-    private final String BASE_URL = AuthUtility.getBaseUrl();
+    private final String BASE_URL = AppEndpoint.DEFAULT_V1.getBaseUrl() + AppEndpoint.AUTH.getBaseUrl();
     private final AuthMiddleware authMiddleware;
     private final AccountService accountService;
     private final CredentialsService credentialsService;
@@ -42,9 +43,9 @@ public class AuthController implements EndpointsRegister {
     public void registerEndpoints(Javalin app) {
         authMiddleware.registerEndpoints(app);
 
-        app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/login", loginHandler());
-        app.post(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/signup", signupHandler());
-        app.get(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL + "/logout", logoutHandler());
+        app.post(BASE_URL + "/login", loginHandler());
+        app.post(BASE_URL + "/signup", signupHandler());
+        app.get(BASE_URL + "/logout", logoutHandler());
     }
 
     private Handler signupHandler() {

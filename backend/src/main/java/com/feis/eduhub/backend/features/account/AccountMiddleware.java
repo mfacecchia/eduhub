@@ -4,6 +4,7 @@ import java.util.EnumSet;
 
 import com.feis.eduhub.backend.common.exceptions.UnauthorizedException;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
+import com.feis.eduhub.backend.common.lib.AppEndpoint;
 import com.feis.eduhub.backend.common.lib.MiddlewareExecutor;
 import com.feis.eduhub.backend.common.middlewares.IsLoggedInMiddleware;
 import com.feis.eduhub.backend.common.rbac.AppAction;
@@ -14,7 +15,7 @@ import io.javalin.http.Handler;
 import io.javalin.http.HandlerType;
 
 public class AccountMiddleware implements EndpointsRegister {
-    private final String BASE_URL = AccountUtility.getBaseUrl();
+    private final String BASE_URL = AppEndpoint.DEFAULT_V1.getBaseUrl() + AppEndpoint.ACCOUNT.getBaseUrl();
     private final Rbac rbac;
 
     public AccountMiddleware() {
@@ -23,12 +24,14 @@ public class AccountMiddleware implements EndpointsRegister {
 
     @Override
     public void registerEndpoints(Javalin app) {
-        app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL,
+        app.before(
+                BASE_URL,
                 MiddlewareExecutor.executeOnMethod(
                         EnumSet.allOf(HandlerType.class),
                         IsLoggedInMiddleware.isLoggedIn(true, false, true, false)));
 
-        app.before(EndpointsRegister.BASE_V1_ENDPOINT + BASE_URL,
+        app.before(
+                BASE_URL,
                 MiddlewareExecutor.executeOnMethod(
                         EnumSet.of(HandlerType.PUT, HandlerType.DELETE),
                         isAllowed()));
