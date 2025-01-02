@@ -80,7 +80,8 @@ CREATE TABLE account_class (
 CREATE TABLE lesson_attendance (
     account_id BIGINT NOT NULL,
     lesson_id BIGINT NOT NULL,
-    attended BOOLEAN NOT NULL DEFAULT false
+    attended BOOLEAN NOT NULL DEFAULT false,
+    UNIQUE(account_id, lesson_id)
 );
 
 CREATE TABLE quiz (
