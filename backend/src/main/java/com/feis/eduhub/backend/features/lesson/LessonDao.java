@@ -17,10 +17,11 @@ import com.feis.eduhub.backend.features.lessonAttendance.dto.LessonDto;
 
 public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDao<Lesson> {
     private final String TABLE_NAME = "lesson";
+    private final String SORT_QUERY = "ORDER BY lesson_date DESC, starts_at DESC";
 
     @Override
     public Optional<Lesson> findById(long id, Connection conn) throws SQLException {
-        String query = String.format("SELECT * FROM \"%s\" WHERE lesson_id = ?", TABLE_NAME);
+        String query = String.format("SELECT * FROM \"%s\" WHERE lesson_id = ? %s", TABLE_NAME, SORT_QUERY);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(id));
         ResultSet rs = ps.executeQuery();
@@ -32,7 +33,7 @@ public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDa
 
     public List<Lesson> findByClassId(long id, Connection conn) throws SQLException {
         List<Lesson> lessonsList = new ArrayList<>();
-        String query = String.format("SELECT * FROM \"%s\" WHERE class_id = ?", TABLE_NAME);
+        String query = String.format("SELECT * FROM \"%s\" WHERE class_id = ? %s", TABLE_NAME, SORT_QUERY);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(id));
         ResultSet rs = ps.executeQuery();
@@ -45,7 +46,7 @@ public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDa
     @Override
     public List<Lesson> getAll(Connection conn) throws SQLException {
         List<Lesson> lessonsList = new ArrayList<>();
-        String query = String.format("SELECT * FROM \"%s\"", TABLE_NAME);
+        String query = String.format("SELECT * FROM \"%s\" %s", TABLE_NAME, SORT_QUERY);
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         while (rs.next()) {
@@ -57,8 +58,8 @@ public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDa
     public List<LessonDto> getAllUpcomingByAccountId(long id, Connection conn) throws SQLException {
         List<LessonDto> lessonsList = new ArrayList<>();
         String query = String.format(
-                "SELECT lesson.lesson_id, lesson_date, starts_at, ends_at, room_no, attended FROM \"%s\" INNER JOIN \"lesson_attendance\" ON lesson_attendance.lesson_id = lesson.lesson_id WHERE lesson_attendance.account_id = ? AND lesson_date >= CURRENT_DATE",
-                TABLE_NAME);
+                "SELECT lesson.lesson_id, lesson_date, starts_at, ends_at, room_no, attended FROM \"%s\" INNER JOIN \"lesson_attendance\" ON lesson_attendance.lesson_id = lesson.lesson_id WHERE lesson_attendance.account_id = ? AND lesson_date >= CURRENT_DATE %s",
+                TABLE_NAME, SORT_QUERY);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(id));
         ResultSet rs = ps.executeQuery();
@@ -72,8 +73,8 @@ public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDa
             throws SQLException {
         List<LessonDto> lessonsList = new ArrayList<>();
         String query = String.format(
-                "SELECT lesson.lesson_id, lesson_date, starts_at, ends_at, room_no, attended FROM \"%s\" INNER JOIN \"lesson_attendance\" ON lesson_attendance.lesson_id = lesson.lesson_id WHERE lesson_attendance.account_id = ? AND class_id = ? AND lesson_date >= CURRENT_DATE",
-                TABLE_NAME);
+                "SELECT lesson.lesson_id, lesson_date, starts_at, ends_at, room_no, attended FROM \"%s\" INNER JOIN \"lesson_attendance\" ON lesson_attendance.lesson_id = lesson.lesson_id WHERE lesson_attendance.account_id = ? AND class_id = ? AND lesson_date >= CURRENT_DATE %s",
+                TABLE_NAME, SORT_QUERY);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(accountId, classId));
         ResultSet rs = ps.executeQuery();
@@ -122,8 +123,8 @@ public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDa
     public List<LessonDto> findAllByAccountId(long id, Connection conn) throws SQLException {
         List<LessonDto> lessonsList = new ArrayList<>();
         String query = String.format(
-                "SELECT lesson.lesson_id, lesson_date, starts_at, ends_at, room_no, attended FROM \"%s\" INNER JOIN \"lesson_attendance\" ON lesson_attendance.lesson_id = lesson.lesson_id WHERE lesson_attendance.account_id = ?",
-                TABLE_NAME);
+                "SELECT lesson.lesson_id, lesson_date, starts_at, ends_at, room_no, attended FROM \"%s\" INNER JOIN \"lesson_attendance\" ON lesson_attendance.lesson_id = lesson.lesson_id WHERE lesson_attendance.account_id = ? %s",
+                TABLE_NAME, SORT_QUERY);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(id));
         ResultSet rs = ps.executeQuery();
@@ -136,8 +137,8 @@ public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDa
     public Optional<LessonDto> findSingleByAccountId(long accountId, long lessonId, Connection conn)
             throws SQLException {
         String query = String.format(
-                "SELECT lesson.lesson_id, lesson_date, starts_at, ends_at, room_no, attended FROM \"%s\" INNER JOIN \"lesson_attendance\" ON lesson_attendance.lesson_id = lesson.lesson_id WHERE lesson_attendance.account_id = ? and lesson.lesson_id = ?",
-                TABLE_NAME);
+                "SELECT lesson.lesson_id, lesson_date, starts_at, ends_at, room_no, attended FROM \"%s\" INNER JOIN \"lesson_attendance\" ON lesson_attendance.lesson_id = lesson.lesson_id WHERE lesson_attendance.account_id = ? and lesson.lesson_id = ? %s",
+                TABLE_NAME, SORT_QUERY);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(accountId, lessonId));
         ResultSet rs = ps.executeQuery();
