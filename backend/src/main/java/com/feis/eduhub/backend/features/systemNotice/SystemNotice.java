@@ -22,4 +22,9 @@ public class SystemNotice {
         this.recipientId = recipientId;
         this.senderId = senderId;
     }
+
+    public SystemNotice(@NonNull String noticeMessage, @NonNull Long recipientId) {
+        this.noticeMessage = noticeMessage;
+        this.recipientId = recipientId;
+    }
 }
