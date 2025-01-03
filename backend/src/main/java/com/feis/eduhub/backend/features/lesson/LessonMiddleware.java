@@ -40,7 +40,7 @@ public class LessonMiddleware implements EndpointsRegister {
     private Handler isAllowed() {
         return (ctx) -> {
             boolean isAllowed = rbac.checkPermissionFromPersistence(ctx.attribute("accountId"),
-                    AppAction.MANAGE_ACCOUNTS);
+                    AppAction.MANAGE_LESSONS);
             if (!isAllowed) {
                 throw new UnauthorizedException("Not authorized to complete this operation.");
             }
