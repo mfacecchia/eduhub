@@ -6,6 +6,7 @@ import com.feis.eduhub.backend.common.config.AppBuilder;
 import com.feis.eduhub.backend.features.account.AccountController;
 import com.feis.eduhub.backend.features.accountClass.controller.ClassMemberController;
 import com.feis.eduhub.backend.features.auth.AuthController;
+import com.feis.eduhub.backend.features.lesson.LessonController;
 import com.feis.eduhub.backend.features.systemClass.SystemClassController;
 
 public class App {
@@ -14,7 +15,8 @@ public class App {
                 Arrays.asList(
                         new AuthController(),
                         new AccountController(),
-                        new SystemClassController(), new ClassMemberController()));
+                        new SystemClassController(), new ClassMemberController(),
+                        new LessonController()));
         appBuilder.configureEndpoints(true);
         appBuilder.start();
     }
