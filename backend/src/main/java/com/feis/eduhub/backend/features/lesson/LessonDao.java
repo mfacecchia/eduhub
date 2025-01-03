@@ -78,7 +78,7 @@ public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDa
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query);
         Sql.setParams(ps, Arrays.asList(lesson.getLessonDate(), lesson.getStartsAt(), lesson.getEndsAt(),
-                lesson.getRoomNo(), lesson.getCreatedById(), lesson.getClassId(), id));
+                lesson.getRoomNo(), lesson.getClassId(), id));
         ps.executeUpdate();
     }
 
