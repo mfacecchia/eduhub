@@ -21,7 +21,6 @@ public class LessonUtility {
                 new Time(json.optLong("startsAt")),
                 new Time(json.optLong("endsAt")),
                 json.optIntegerObject("roomNo"),
-                json.optLongObject("createdById"),
                 json.optLongObject("classId"));
         if (includeId) {
             lesson.setLessonId(json.optLongObject("lessonId"));
