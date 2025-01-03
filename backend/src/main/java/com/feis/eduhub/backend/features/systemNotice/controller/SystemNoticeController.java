@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import com.feis.eduhub.backend.common.dto.ResponseDto;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
+import com.feis.eduhub.backend.common.lib.ContextUtil;
 import com.feis.eduhub.backend.features.systemNotice.SystemNotice;
 import com.feis.eduhub.backend.features.systemNotice.middleware.SystemNoticeMiddleware;
 import com.feis.eduhub.backend.features.systemNotice.service.SystemNoticeService;
@@ -27,6 +28,7 @@ public class SystemNoticeController implements EndpointsRegister {
         systemNoticeMiddleware.registerEndpoints(app);
 
         app.post(BASE_V1_ENDPOINT, createNoticeHandler());
+        app.delete(BASE_V1_ENDPOINT + "/{noticeId}", deleteNoticeHandler());
     }
 
     private Handler createNoticeHandler() {
@@ -41,6 +43,17 @@ public class SystemNoticeController implements EndpointsRegister {
                     .withData(systemNotice)
                     .build();
             ctx.status(201).json(response);
+        };
+    }
+
+    private Handler deleteNoticeHandler() {
+        return (ctx) -> {
+            long noticeId = ContextUtil.getIdFromPath(ctx, "noticeId");
+            systemNoticeService.deleteNotice(noticeId);
+            ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(200)
+                    .withMessage("Success")
+                    .build();
+            ctx.status(200).json(response);
         };
     }
 }
