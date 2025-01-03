@@ -8,6 +8,7 @@ import com.feis.eduhub.backend.common.dto.ResponseDto;
 import com.feis.eduhub.backend.common.exceptions.ValidationException;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
 import com.feis.eduhub.backend.common.lib.AppEndpoint;
+import com.feis.eduhub.backend.common.lib.ContextUtil;
 import com.feis.eduhub.backend.features.lessonAttendance.dto.LessonDto;
 
 import io.javalin.Javalin;
@@ -28,6 +29,10 @@ public class LessonController implements EndpointsRegister {
         lessonMiddleware.registerEndpoints(app);
 
         app.get(BASE_V1_URL, lessonsListHandler(false));
+        app.get(
+                AppEndpoint.DEFAULT_V1.getBaseUrl()
+                        + AppEndpoint.CLASS.getBaseUrl() + "/{classId}/lessons/upcoming",
+                courseLessonsListHandler());
         app.get(BASE_V1_URL + "/upcoming", lessonsListHandler(true));
         app.put(BASE_V1_URL, lessonUpdateHandler());
         app.get(BASE_V1_URL + "/{lessonId}", lessonInfoHandler());
@@ -49,6 +54,21 @@ public class LessonController implements EndpointsRegister {
                     .build();
             ctx.status(200).json(response);
         };
+    }
+
+    private Handler courseLessonsListHandler() {
+        return (ctx) -> {
+            long accountId = ctx.attribute("accountId");
+            long classId = ContextUtil.getIdFromPath(ctx, "classId");
+            List<LessonDto> lessonsList;
+            lessonsList = lessonService.getAllUpcomingLessonsByAccountIdAndClassId(accountId, classId);
+            ResponseDto<List<LessonDto>> response = new ResponseDto.ResponseBuilder<List<LessonDto>>(200)
+                    .withMessage(String.format("Found %d entries", lessonsList.size()))
+                    .withData(lessonsList)
+                    .build();
+            ctx.status(200).json(response);
+        };
+
     }
 
     private Handler lessonUpdateHandler() {
