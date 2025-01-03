@@ -39,7 +39,8 @@ CREATE TABLE credentials (
 CREATE TABLE system_notice (
     notice_id BIGSERIAL PRIMARY KEY,
     notice_message VARCHAR(200) NOT NULL,
-    account_id BIGINT NOT NULL
+    recipient_id BIGINT NOT NULL,
+    sender_id BIGINT
 );
 
 CREATE TABLE logged_device (
@@ -125,8 +126,12 @@ ADD CONSTRAINT fk_credentials_account
 FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE;
 
 ALTER TABLE system_notice
-ADD CONSTRAINT fk_system_notice_account
-FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE;
+ADD CONSTRAINT fk_system_notice_account_sender
+FOREIGN KEY (sender_id) REFERENCES account(account_id) ON DELETE SET NULL;
+
+ALTER TABLE system_notice
+ADD CONSTRAINT fk_system_notice_account_recipient
+FOREIGN KEY (recipient_id) REFERENCES account(account_id) ON DELETE CASCADE;
 
 ALTER TABLE logged_device
 ADD CONSTRAINT fk_logged_device_account

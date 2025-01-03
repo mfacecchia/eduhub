@@ -33,11 +33,11 @@ INSERT INTO account_role (role_name) VALUES
     ('STUDENT');
 
 INSERT INTO account (first_name, last_name, icon, role_id) VALUES
-    ('John', 'Smith', '/icons/john.jpg', 1),
-    ('Mary', 'Johnson', '/icons/mary.jpg', 2),
-    ('David', 'Williams', '/icons/david.jpg', 2),
+    ('John', 'Smith', null, 1),
+    ('Mary', 'Johnson', null, 2),
+    ('David', 'Williams', null, 2),
     ('Emma', 'Brown', null, 3),
-    ('James', 'Davis', '/icons/james.jpg', 3);
+    ('James', 'Davis', null, 3);
 
 /* NOTE: password is 'password123' hashed using Argon2id */
 INSERT INTO credentials (email, password, updated_at, account_id) VALUES
@@ -93,7 +93,7 @@ INSERT INTO account_quiz_answer (account_id, answer_id) VALUES
     (4, 3),
     (5, 5);
 
-INSERT INTO system_notice (notice_message, account_id) VALUES
-    ('Welcome to the new semester!', 1),
-    ('Your Math homework is due tomorrow', 4),
-    ('Class canceled for tomorrow', 5);
+INSERT INTO system_notice (notice_message, recipient_id, sender_id) VALUES
+    ('Welcome to the new semester!', 2, 1),
+    ('Your Math homework is due tomorrow', 4, 1),
+    ('Class canceled for tomorrow', 5, 1);
