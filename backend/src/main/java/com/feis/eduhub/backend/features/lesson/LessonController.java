@@ -27,6 +27,7 @@ public class LessonController implements EndpointsRegister {
 
         app.get(BASE_V1_URL, lessonsListHandler());
         app.get(BASE_V1_URL + "/{lessonId}", lessonInfoHandler());
+        app.delete(BASE_V1_URL + "/{lessonId}", deleteLessonHandler());
     }
 
     private Handler lessonsListHandler() {
@@ -60,4 +61,23 @@ public class LessonController implements EndpointsRegister {
             ctx.status(200).json(response);
         };
     }
+
+    private Handler deleteLessonHandler() {
+        return (ctx) -> {
+            Long lessonId;
+            try {
+                lessonId = Long.valueOf(ctx.pathParam("lessonId"));
+            } catch (NumberFormatException e) {
+                throw new ValidationException("Invalid lessonId", e);
+            }
+            if (lessonId <= 0) {
+                throw new ValidationException("Invalid lessonId");
+            }
+            lessonService.deleteLesson(lessonId);
+            ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(200)
+                    .withMessage("Success")
+                    .build();
+            ctx.status(200).json(response);
+        };
+    };
 }
