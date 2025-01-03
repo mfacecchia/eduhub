@@ -68,6 +68,21 @@ public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDa
         return lessonsList;
     }
 
+    public List<LessonDto> getAllUpcomingByAccountIdAndClassId(long accountId, long classId, Connection conn)
+            throws SQLException {
+        List<LessonDto> lessonsList = new ArrayList<>();
+        String query = String.format(
+                "SELECT lesson.lesson_id, lesson_date, starts_at, ends_at, room_no, attended FROM \"%s\" INNER JOIN \"lesson_attendance\" ON lesson_attendance.lesson_id = lesson.lesson_id WHERE lesson_attendance.account_id = ? AND class_id = ? AND lesson_date >= CURRENT_DATE",
+                TABLE_NAME);
+        PreparedStatement ps = conn.prepareStatement(query);
+        Sql.setParams(ps, Arrays.asList(accountId, classId));
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            lessonsList.add(getDtoTableData(rs));
+        }
+        return lessonsList;
+    }
+
     @Override
     public Lesson create(Lesson lesson, Connection conn) throws SQLException {
         String query = String.format(
