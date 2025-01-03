@@ -6,7 +6,7 @@ import java.util.Set;
 public enum UserRole {
     ADMIN(EnumSet.of(AppAction.EVERYTHING)),
     TEACHER(EnumSet.of(AppAction.MANAGE_QUIZZES, AppAction.ASSESS_QUIZZES,
-            AppAction.SEND_NOTIFICATIONS)),
+            AppAction.MANAGE_NOTICES)),
     STUDENT(EnumSet.of(AppAction.ANSWER_QUIZZES));
 
     private final Set<AppAction> permittedActions;
