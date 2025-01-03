@@ -55,6 +55,14 @@ public class LessonService {
         }
     }
 
+    public List<LessonDto> getAllUpcomingLessons(long id) throws AppException {
+        try (Connection conn = databaseConnection.getConnection()) {
+            return lessonDao.getAllUpcomingByAccountId(id, conn);
+        } catch (SQLException e) {
+            throw new DataFetchException("Could not fetch data", e);
+        }
+    }
+
     public Lesson createLesson(Lesson lesson) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             try {
