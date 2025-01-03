@@ -27,16 +27,22 @@ public class LessonController implements EndpointsRegister {
     public void registerEndpoints(Javalin app) {
         lessonMiddleware.registerEndpoints(app);
 
-        app.get(BASE_V1_URL, lessonsListHandler());
+        app.get(BASE_V1_URL, lessonsListHandler(false));
+        app.get(BASE_V1_URL + "/upcoming", lessonsListHandler(true));
         app.put(BASE_V1_URL, lessonUpdateHandler());
         app.get(BASE_V1_URL + "/{lessonId}", lessonInfoHandler());
         app.delete(BASE_V1_URL + "/{lessonId}", deleteLessonHandler());
     }
 
-    private Handler lessonsListHandler() {
+    private Handler lessonsListHandler(boolean upcomingFilter) {
         return (ctx) -> {
             long accountId = ctx.attribute("accountId");
-            List<LessonDto> lessonsList = lessonService.getLessonsByAccountId(accountId);
+            List<LessonDto> lessonsList;
+            if (upcomingFilter) {
+                lessonsList = lessonService.getAllUpcomingLessons(accountId);
+            } else {
+                lessonsList = lessonService.getLessonsByAccountId(accountId);
+            }
             ResponseDto<List<LessonDto>> response = new ResponseDto.ResponseBuilder<List<LessonDto>>(200)
                     .withMessage(String.format("Found %d entries", lessonsList.size()))
                     .withData(lessonsList)
