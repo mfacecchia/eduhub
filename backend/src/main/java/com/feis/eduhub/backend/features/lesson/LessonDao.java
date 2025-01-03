@@ -87,11 +87,11 @@ public class LessonDao implements SimpleDatabaseReadDao<Lesson>, DatabaseWriteDa
     @Override
     public Lesson create(Lesson lesson, Connection conn) throws SQLException {
         String query = String.format(
-                "INSERT INTO \"%s\" (lesson_date, starts_at, ends_at, room_no, class_id) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO \"%s\" (lesson_date, starts_at, ends_at, room_no, created_by_id, class_id) VALUES (?, ?, ?, ?, ?, ?)",
                 TABLE_NAME);
         PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         Sql.setParams(ps, Arrays.asList(lesson.getLessonDate(), lesson.getStartsAt(), lesson.getEndsAt(),
-                lesson.getRoomNo(), lesson.getClassId()));
+                lesson.getRoomNo(), lesson.getCreatedById(), lesson.getClassId()));
         ps.executeUpdate();
         ResultSet generatedKeys = ps.getGeneratedKeys();
         if (!generatedKeys.next()) {
