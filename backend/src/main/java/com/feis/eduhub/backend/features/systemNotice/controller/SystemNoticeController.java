@@ -19,5 +19,6 @@ public class SystemNoticeController implements EndpointsRegister {
 
     @Override
     public void registerEndpoints(Javalin app) {
+        systemNoticeMiddleware.registerEndpoints(app);
     }
 }
