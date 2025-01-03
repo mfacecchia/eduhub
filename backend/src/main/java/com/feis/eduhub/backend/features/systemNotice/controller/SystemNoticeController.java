@@ -34,8 +34,22 @@ public class SystemNoticeController implements EndpointsRegister {
         systemNoticeMiddleware.registerEndpoints(app);
 
         app.get(BASE_V1_ENDPOINT, noticesListHandler());
+        app.get(BASE_V1_ENDPOINT + "/{noticeId}", noticeInfoHandler());
         app.post(BASE_V1_ENDPOINT, createNoticeHandler());
         app.delete(BASE_V1_ENDPOINT + "/{noticeId}", deleteNoticeHandler());
+    }
+
+    private Handler noticeInfoHandler() {
+        return (ctx) -> {
+            long noticeId = ContextUtil.getIdFromPath(ctx, "noticeId");
+            SystemNoticeFullInfoDto notice = systemNoticeFullInfoService.getNoticeById(noticeId);
+            ResponseDto<SystemNoticeFullInfoDto> response = new ResponseDto.ResponseBuilder<SystemNoticeFullInfoDto>(
+                    200)
+                    .withMessage("Success")
+                    .withData(notice)
+                    .build();
+            ctx.status(201).json(response);
+        };
     }
 
     private Handler noticesListHandler() {
