@@ -8,7 +8,7 @@ package com.feis.eduhub.backend.common.exceptions;
  * @see AppException
  */
 public class NotFoundException extends AppException {
-    private final static int STATUS_CODE = 404;
+    private final static int STATUS_CODE = 400;
 
     public NotFoundException(String message) {
         super(STATUS_CODE, message);
