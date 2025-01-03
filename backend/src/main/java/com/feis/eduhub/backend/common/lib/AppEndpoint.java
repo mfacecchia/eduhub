@@ -11,7 +11,8 @@ public enum AppEndpoint {
     AUTH("/auth"),
     ACCOUNT("/accounts"),
     CLASS("/classes"),
-    LESSON("/lessons");
+    LESSON("/lessons"),
+    NOTICE("/notices");
 
     private final String BASE_URL;
 
