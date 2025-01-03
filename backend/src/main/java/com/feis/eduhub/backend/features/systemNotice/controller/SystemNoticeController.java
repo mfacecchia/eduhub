@@ -71,6 +71,11 @@ public class SystemNoticeController implements EndpointsRegister {
             SystemNotice systemNotice = SystemNoticeUtility.getClassFromBody(json, false);
             systemNotice.setSenderId(accountId);
             systemNoticeService.createNotice(systemNotice);
+            SystemNoticeFullInfoDto systemNoticeFullInfo = systemNoticeFullInfoService
+                    .getNoticeById(systemNotice.getNoticeId());
+            systemNoticeService.sendNoticeViaEmail(
+                    systemNoticeFullInfo.getRecipientEmail(),
+                    systemNoticeFullInfo.getNoticeMessage());
             ResponseDto<SystemNotice> response = new ResponseDto.ResponseBuilder<SystemNotice>(201)
                     .withMessage("Success")
                     .withData(systemNotice)
