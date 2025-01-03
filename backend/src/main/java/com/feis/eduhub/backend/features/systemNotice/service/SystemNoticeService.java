@@ -21,6 +21,7 @@ public class SystemNoticeService {
     public SystemNotice createNotice(SystemNotice systemNotice) throws AppException {
         try (Connection conn = databaseConnection.getConnection()) {
             systemNoticeDao.create(systemNotice, conn);
+            conn.commit();
             return systemNotice;
         } catch (SQLException e) {
             throw new DatabaseQueryException("Error while creating notice", e);
