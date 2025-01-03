@@ -34,6 +34,7 @@ public class LessonController implements EndpointsRegister {
                         + AppEndpoint.CLASS.getBaseUrl() + "/{classId}/lessons/upcoming",
                 courseLessonsListHandler());
         app.get(BASE_V1_URL + "/upcoming", lessonsListHandler(true));
+        app.post(BASE_V1_URL, lessonCreateHandler());
         app.put(BASE_V1_URL, lessonUpdateHandler());
         app.get(BASE_V1_URL + "/{lessonId}", lessonInfoHandler());
         app.delete(BASE_V1_URL + "/{lessonId}", deleteLessonHandler());
@@ -55,6 +56,21 @@ public class LessonController implements EndpointsRegister {
             ctx.status(200).json(response);
         };
     }
+
+    private Handler lessonCreateHandler() {
+        return (ctx) -> {
+            long accountId = ctx.attribute("accountId");
+            JSONObject json = new JSONObject(ctx.body());
+            Lesson lesson = LessonUtility.getLessonFromBody(json, false);
+            lesson.setCreatedById(accountId);
+            lessonService.createLesson(lesson);
+            ResponseDto<Lesson> response = new ResponseDto.ResponseBuilder<Lesson>(201)
+                    .withMessage("Successfully created class")
+                    .withData(lesson)
+                    .build();
+            ctx.status(201).json(response);
+        };
+    };
 
     private Handler courseLessonsListHandler() {
         return (ctx) -> {
