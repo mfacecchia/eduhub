@@ -2,6 +2,8 @@ package com.feis.eduhub.backend.features.lesson;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.feis.eduhub.backend.common.dto.ResponseDto;
 import com.feis.eduhub.backend.common.exceptions.ValidationException;
 import com.feis.eduhub.backend.common.interfaces.EndpointsRegister;
@@ -26,6 +28,7 @@ public class LessonController implements EndpointsRegister {
         lessonMiddleware.registerEndpoints(app);
 
         app.get(BASE_V1_URL, lessonsListHandler());
+        app.put(BASE_V1_URL, lessonUpdateHandler());
         app.get(BASE_V1_URL + "/{lessonId}", lessonInfoHandler());
         app.delete(BASE_V1_URL + "/{lessonId}", deleteLessonHandler());
     }
@@ -37,6 +40,22 @@ public class LessonController implements EndpointsRegister {
             ResponseDto<List<LessonDto>> response = new ResponseDto.ResponseBuilder<List<LessonDto>>(200)
                     .withMessage(String.format("Found %d entries", lessonsList.size()))
                     .withData(lessonsList)
+                    .build();
+            ctx.status(200).json(response);
+        };
+    }
+
+    private Handler lessonUpdateHandler() {
+        return (ctx) -> {
+            JSONObject json = new JSONObject(ctx.body());
+            Lesson lesson = LessonUtility.getLessonFromBody(json, true);
+            Long lessonId = lesson.getLessonId();
+            if (lessonId <= 0) {
+                throw new ValidationException("Invalid Lesson ID");
+            }
+            lessonService.updateLesson(lessonId, lesson);
+            ResponseDto<?> response = new ResponseDto.ResponseBuilder<>(200)
+                    .withMessage("Lesson successfully updated")
                     .build();
             ctx.status(200).json(response);
         };
