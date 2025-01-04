@@ -13,8 +13,8 @@ const queryClient = new QueryClient();
 
 function App() {
     return (
-        <BrowserRouter>
-            <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
                 <AuthContext>
                     <Routes>
                         <Route path="/" element={<MainLayout />}>
@@ -38,8 +38,8 @@ function App() {
                         <Route path="*" element={<NotFoundPage />}></Route>
                     </Routes>
                 </AuthContext>
-            </QueryClientProvider>
-        </BrowserRouter>
+            </BrowserRouter>
+        </QueryClientProvider>
     );
 }
 
