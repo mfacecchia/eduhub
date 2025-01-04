@@ -2,9 +2,12 @@ import { Button } from "@/components/common/Button";
 import Container from "@/components/common/Container";
 import Form from "@/components/common/Form";
 import Input from "@/components/common/Input";
+import { Toaster } from "@/components/common/toaster";
+import { useToast } from "@/hooks/use-toast";
 import { backendAddress, queryOptions } from "@/lib/constants";
 import { loginAccountSchema } from "@/schemas/accountSchema";
 import { TLoginAccount } from "@/types/account";
+import { TDefaultResponseBody } from "@/types/response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -20,15 +23,52 @@ const LoginPage = () => {
         reValidateMode: "onBlur",
     });
     const queryClient = useQueryClient();
+    const toast = useToast();
 
-    // TODO: Display a Toast on success
-    async function loginHandler(formData: TLoginAccount) {
-        await axios.post(`${backendAddress}/api/v1/auth/login`, formData, {
-            withCredentials: true,
+    function loginHandler(formData: TLoginAccount) {
+        toast.toast({
+            title: "Processing",
+            description: "Logging in. Please wait",
+            variant: "default",
         });
-        queryClient.invalidateQueries({
-            queryKey: queryOptions.account.queryKey,
-        });
+        axios
+            .post(`${backendAddress}/api/v1/auth/login`, formData, {
+                withCredentials: true,
+                validateStatus: (status) => {
+                    return (status >= 200 && status < 300) || status === 401;
+                },
+                timeout: 1500,
+            })
+            .then(({ data }: { data: TDefaultResponseBody }) => {
+                if (data.status === 401) {
+                    toast.toast({
+                        title: "Wrong credentials",
+                        description: "Invalid Email/Password combination",
+                        variant: "destructive",
+                    });
+                    return;
+                }
+                if (data?.status >= 300) {
+                    toast.toast({
+                        title: "Error",
+                        description: data?.message,
+                        variant: "destructive",
+                    });
+                    return;
+                }
+                queryClient.invalidateQueries({
+                    queryKey: queryOptions.account.queryKey,
+                });
+            })
+            .catch((err) => {
+                console.error(err);
+                toast.toast({
+                    title: "Error",
+                    description:
+                        "An unknown error occured. Please try again later.",
+                    variant: "destructive",
+                });
+            });
     }
 
     return (
@@ -58,6 +98,7 @@ const LoginPage = () => {
                     Submit
                 </Button>
             </Form>
+            <Toaster />
         </Container>
     );
 };
