@@ -11,8 +11,8 @@ export const accountSchema = z
         lastName: requiredString,
         email: emailField,
         password: requiredStringNoTrim.min(
-            15,
-            "Minimum length is 15 characters"
+            10,
+            "Minimum length is 10 characters"
         ),
         repeatPassword: requiredStringNoTrim,
     })
