@@ -1,37 +1,35 @@
-import { fetchAccount } from "@/api/accountApi";
 import ClassCard from "@/components/ClassCard";
 import {
     Carousel,
     CarouselContent,
     CarouselItem,
-} from "@/components/common/carousel";
+} from "@/components/common/Carousel";
 import Section from "@/components/common/Section";
 import LessonCard from "@/components/LessonCard";
+import { useAccountAuthContext } from "@/context/AuthContext";
+import LoadingLayout from "@/layouts/LoadingLayout";
 import getGreeting from "@/lib/greetingSelector";
-import { TDbAccount } from "@/types/account";
-import { useQuery } from "@tanstack/react-query";
 import { ChevronRight } from "lucide-react";
-import { Link } from "react-router";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router";
 
 const DashboardPage = () => {
-    const { data: accountData, isLoading: isAccountLoading } =
-        useQuery<TDbAccount>({
-            queryKey: ["account"],
-            queryFn: fetchAccount,
-        });
+    const { account, isLoading } = useAccountAuthContext();
     const greeting = getGreeting();
+    const navigate = useNavigate();
 
-    // TODO: Display an error in case of failed fetch
-    return (
+    useEffect(() => {
+        if (!account) navigate("/login");
+    });
+
+    return isLoading ? (
+        <LoadingLayout />
+    ) : (
         <>
             <section>
                 <p className="large">{greeting ?? "Hello"},</p>
                 <h2>
-                    {isAccountLoading
-                        ? "Loading..."
-                        : accountData?.id
-                        ? `${accountData?.firstName} ${accountData?.lastName}`
-                        : "User"}
+                    {account?.firstName} {account?.lastName}
                 </h2>
             </section>
             <main className="mb-11">
