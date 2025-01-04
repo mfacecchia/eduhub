@@ -33,7 +33,14 @@ public class AppBuilder {
     public AppBuilder(List<EndpointsRegister> appControllers) {
         this.appControllers = appControllers;
         port = 8000;
-        app = Javalin.create();
+        app = Javalin.create(config -> {
+            config.bundledPlugins.enableCors(cors -> {
+                cors.addRule(it -> {
+                    it.allowHost("http://localhost:5173");
+                    it.allowCredentials = true;
+                });
+            });
+        });
     }
 
     public AppBuilder(List<EndpointsRegister> appControllers, int port) {
