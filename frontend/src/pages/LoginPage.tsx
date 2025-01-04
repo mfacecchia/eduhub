@@ -3,8 +3,8 @@ import Container from "@/components/common/Container";
 import Form from "@/components/common/Form";
 import Input from "@/components/common/Input";
 import { backendAddress, queryOptions } from "@/lib/constants";
-import { accountSchema } from "@/schemas/accountSchema";
-import { TAccount } from "@/types/account";
+import { loginAccountSchema } from "@/schemas/accountSchema";
+import { TLoginAccount } from "@/types/account";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -15,52 +15,28 @@ const LoginPage = () => {
         register,
         handleSubmit,
         formState: { isSubmitting, errors },
-    } = useForm<TAccount>({
-        resolver: zodResolver(accountSchema),
+    } = useForm<TLoginAccount>({
+        resolver: zodResolver(loginAccountSchema),
         reValidateMode: "onBlur",
     });
     const queryClient = useQueryClient();
 
     // TODO: Display a Toast on success
-    async function loginHandler(formData: TAccount) {
+    async function loginHandler(formData: TLoginAccount) {
         await axios.post(`${backendAddress}/api/v1/auth/login`, formData, {
             withCredentials: true,
         });
-        // TODO: Redirect to dashboard on success
         queryClient.invalidateQueries({
             queryKey: queryOptions.account.queryKey,
         });
     }
 
-    // TODO: Email and password fields only
     return (
         <Container className="text-left">
             <Form className="px-0" onSubmit={handleSubmit(loginHandler)}>
                 <div>
                     <p className="large">EduHub</p>
                     <h2>Login</h2>
-                </div>
-                <div className="flex w-full">
-                    <Input
-                        {...register("firstName")}
-                        type="text"
-                        id="firstName"
-                        placeholder="First Name"
-                        className="rounded-r-none"
-                        label="First Name"
-                        errorLabel={
-                            errors.firstName && errors.firstName.message
-                        }
-                    />
-                    <Input
-                        {...register("lastName")}
-                        id="lastName"
-                        type="text"
-                        placeholder="Last Name"
-                        className="rounded-l-none"
-                        label="Last Name"
-                        errorLabel={errors.lastName && errors.lastName.message}
-                    />
                 </div>
                 <Input
                     {...register("email")}
@@ -77,16 +53,6 @@ const LoginPage = () => {
                     placeholder="Password"
                     label="Password"
                     errorLabel={errors.password && errors.password.message}
-                />
-                <Input
-                    {...register("repeatPassword")}
-                    type="password"
-                    id="passwordRepeat"
-                    placeholder="Repeat Password"
-                    label="Repeat Password"
-                    errorLabel={
-                        errors.repeatPassword && errors.repeatPassword.message
-                    }
                 />
                 <Button type="submit" disabled={isSubmitting}>
                     Submit
