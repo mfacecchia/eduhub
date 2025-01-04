@@ -2,9 +2,12 @@ import { Button } from "@/components/common/Button";
 import Container from "@/components/common/Container";
 import Form from "@/components/common/Form";
 import Input from "@/components/common/Input";
+import { backendAddress, queryOptions } from "@/lib/constants";
 import { accountSchema } from "@/schemas/accountSchema";
 import { TAccount } from "@/types/account";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 
 const LoginPage = () => {
@@ -16,15 +19,20 @@ const LoginPage = () => {
         resolver: zodResolver(accountSchema),
         reValidateMode: "onBlur",
     });
+    const queryClient = useQueryClient();
 
-    function loginHandler(formData: TAccount) {
-        console.log("Submitting data");
-        console.log(formData);
-        setTimeout(() => {
-            console.log("Done.");
-        }, 2000);
+    // TODO: Display a Toast on success
+    async function loginHandler(formData: TAccount) {
+        await axios.post(`${backendAddress}/api/v1/auth/login`, formData, {
+            withCredentials: true,
+        });
+        // TODO: Redirect to dashboard on success
+        queryClient.invalidateQueries({
+            queryKey: queryOptions.account.queryKey,
+        });
     }
 
+    // TODO: Email and password fields only
     return (
         <Container className="text-left">
             <Form className="px-0" onSubmit={handleSubmit(loginHandler)}>
