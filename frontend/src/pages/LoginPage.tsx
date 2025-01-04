@@ -3,7 +3,9 @@ import Container from "@/components/common/Container";
 import Form from "@/components/common/Form";
 import Input from "@/components/common/Input";
 import { Toaster } from "@/components/common/toaster";
+import { useAccountAuthContext } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import LoadingLayout from "@/layouts/LoadingLayout";
 import { backendAddress, queryOptions } from "@/lib/constants";
 import { loginAccountSchema } from "@/schemas/accountSchema";
 import { TLoginAccount } from "@/types/account";
@@ -11,9 +13,12 @@ import { TDefaultResponseBody } from "@/types/response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 
 const LoginPage = () => {
+    const { account, isLoading } = useAccountAuthContext();
     const {
         register,
         handleSubmit,
@@ -24,6 +29,11 @@ const LoginPage = () => {
     });
     const queryClient = useQueryClient();
     const toast = useToast();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (account) navigate("/dashboard");
+    });
 
     function loginHandler(formData: TLoginAccount) {
         toast.toast({
@@ -71,7 +81,9 @@ const LoginPage = () => {
             });
     }
 
-    return (
+    return isLoading ? (
+        <LoadingLayout />
+    ) : (
         <Container className="text-left">
             <Form className="px-0" onSubmit={handleSubmit(loginHandler)}>
                 <div>
