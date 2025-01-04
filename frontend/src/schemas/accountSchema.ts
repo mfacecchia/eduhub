@@ -20,3 +20,8 @@ export const accountSchema = z
         message: "Passwords not matching",
         path: ["repeatPassword"],
     });
+
+export const loginAccountSchema = z.object({
+    email: emailField,
+    password: requiredStringNoTrim,
+});
