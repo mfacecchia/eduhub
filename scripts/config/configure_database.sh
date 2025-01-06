@@ -23,6 +23,6 @@ PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -c "DROP DATABASE IF EXISTS eduhub"
 PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -c "CREATE DATABASE eduhub"
 
 # Tables creation and sample data fillout
-PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -d eduhub -f ../db/ddl.sql
-PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -d eduhub -f ../db/dml.sql
+PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -d eduhub -f ./db/ddl.sql
+PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -d eduhub -f ./db/dml.sql
 echo "-----------End configuration---------\n\n"
