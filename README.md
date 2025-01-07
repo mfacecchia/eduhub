@@ -7,7 +7,7 @@ This repo refers to the backend side of the EduHub project, you can find documen
 - [Requirements](#requirements)
 - [Quick Start](#quick-start)
 - [Built In - Technologies](#built-in---technologies)
-- [Modules References](#modules-references)
+- [Libraries References](#libraries-references)
 - [Environmental Variables](#environmental-variables)
 - [Features](#features)
 
@@ -30,11 +30,22 @@ Once you completed the full app configuration, all you will have to do is runing
 ```zsh
 ./scripts/startup/build_server.sh
 ```
-Be sure to run this command while on the project's root directory.
+**Be sure to run this command while on the project's root directory.**
 
 ## Built In - Technologies
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Maven](https://img.shields.io/badge/apache_maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)\
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white)
 
-## Modules References
+## Libraries References
+- [Javalin](https://javalin.io)
+- [Jedis](https://redis.io/docs/latest/develop/clients/jedis/)
+- [C3P0](https://javadoc.io/doc/c3p0/c3p0/latest/index.html)
+- [Auth0 JWT](https://github.com/auth0/java-jwt?tab=readme-ov-file#documentation)
+- [Angus Mail](https://javadoc.io/doc/org.eclipse.angus/jakarta.mail/latest/jakarta.mail/module-summary.html)
+- [PostgreSQL JDBC Driver](https://github.com/pgjdbc/pgjdbc)
+- [Dotenv](https://github.com/cdimascio/dotenv-java)
 
 ## Environmental Variables
 A `.env.sample` file is provided in the project with all instructions on how to use it in your project and customize it based on your needs. Here is a quick explanation:
