@@ -1,5 +1,7 @@
 # EduHub
 **THE** platform for schools featuring Lessons scheduling, students' attendance tracking, documents sharing, and quizzes creation.
+This repo refers to the backend side of the EduHub project, you can find documentation about the Frontend side on [this link](https://github.com/mfacecchia/eduhub-frontend).
+**Note:** this project is still under development and some functionalities may not work properly or not work at all. Additional updates on both the frontend and the backend side are coming in the following weeks.
 
 ## Table of contents
 - [Requirements](#requirements)
@@ -12,7 +14,6 @@
 ## Requirements
 - Java 21
 - Maven 3.9.9
-- Node.JS
 - PostgreSQL
 - Redis
 
@@ -20,34 +21,23 @@
 A `.env.sample` file is provided in the source code. To acknowledge all the environmental variables used in this project and how you can tweak them, you can refer to [this section](#environmental-variables) of the README.
 After you completed the environmental variables configuration, you just need to run your PostgreSQL server and, in your terminal, execute the following:
 ```zsh
-cd eduhub
+cd eduhub-backend
 chmod +x scripts/*
 ./scripts/configure_database.sh
-cd frontend
-npm install
 ```
 This will setup the database with all tables and load some sample data to test the application. Feel free to tweak the configuration script to fit your specific needs!
 Once you completed the full app configuration, all you will have to do is runing the application. To do so, all you'll have to do is starting up your PostgreSQL database, your Redis server and then the following command
 ```zsh
 ./scripts/startup/build_server.sh
 ```
-for the backend, and
-```zsh
-cd frontend
-npm run dev
-```
-to start the frontend server.
+Be sure to run this command while on the project's root directory.
 
 ## Built In - Technologies
 
 ## Modules References
 
 ## Environmental Variables
-A `.env.sample` file is provided in the project for both the [Frontend](https://github.com/mfacecchia/eduhub/blob/main/frontend/.env.sample) and the [Backend](https://github.com/mfacecchia/eduhub/blob/main/backend/.env.sample) with all instructions on how to use it in your project and customize it based on your needs. Here is a quick explanation:
-#### Frontend
-- `VITE_BACKEND_ADDRESS`
-- `VITE_PAGE_TITLE`
-#### Backend
+A `.env.sample` file is provided in the project with all instructions on how to use it in your project and customize it based on your needs. Here is a quick explanation:
 - `DB_CONNECTION_STRING` and `REDIS_CONNECTION_STRING`, which, as the same name suggests, are used by ORMs and other libraries as information about how to connect to each persistence.
 - `DB_USERNAME` and `DB_PASSWORD`, representing PostgreSQL connection username and password
 - `DB_DRIVER`, the driver which will be used to interact with the Database
