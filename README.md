@@ -1,7 +1,7 @@
 # EduHub
 **THE** platform for schools featuring Lessons scheduling, students' attendance tracking, documents sharing, and quizzes creation.\
-This repo refers to the backend side of the EduHub project, you can find documentation about the Frontend side on [this link](https://github.com/mfacecchia/eduhub-frontend).\
-**Note:** this project is still under development and some functionalities may not work properly or not work at all. Additional updates on both the frontend and the backend side are coming in the following weeks. If you want to test all available functionalities, a [Postman workspace](https://www.postman.com/fe-is/workspace/eduhub/collection/34159814-65d022b3-7ab5-4a7b-b9d8-6132bd3e3fe1?action=share&creator=34159814) is publicly available. All endpoints' documentation with usage instructions has been provided in the Overview page.\
+This repo refers to the backend side of the EduHub project, you can find documentation about the Frontend side on [this link](https://github.com/mfacecchia/eduhub-frontend).
+>:warning: **Note:** this project is still under development and some functionalities may not work properly or not work at all. Additional updates on both the frontend and the backend side are coming in the following weeks. If you want to test all available functionalities, a [Postman workspace](https://www.postman.com/fe-is/workspace/eduhub/collection/34159814-65d022b3-7ab5-4a7b-b9d8-6132bd3e3fe1?action=share&creator=34159814) is publicly available. All endpoints' documentation with usage instructions has been provided in the Overview page.\
 For an in-depth documentation about all the classes and methods in this project, a [docs](https://github.com/mfacecchia/eduhub-backend/tree/main/docs) directory has been provided with the full source code's Javadoc.
 
 ## Table of contents
