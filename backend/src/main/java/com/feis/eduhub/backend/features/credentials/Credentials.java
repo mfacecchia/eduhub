@@ -1,41 +1,30 @@
 package com.feis.eduhub.backend.features.credentials;
 
-import lombok.AllArgsConstructor;
+import java.time.Instant;
+
+import com.feis.eduhub.backend.features.account.Account;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Entity
 public class Credentials {
-    @NonNull
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long credentialsId;
-    @NonNull
+    @Column(unique = true)
     private String email;
-    @NonNull
     private String password;
-    @NonNull
-    private Long updatedAt;
-    @NonNull
-    private Long accountId;
+    private Long updatedAt = Instant.now().getEpochSecond();
 
-    public Credentials(@NonNull String email, @NonNull String password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    public Credentials(@NonNull String email, @NonNull String password, @NonNull Long updatedAt) {
-        this.email = email;
-        this.password = password;
-        this.updatedAt = updatedAt;
-    }
-
-    public Credentials(@NonNull String email, @NonNull String password, @NonNull Long updatedAt,
-            @NonNull Long accountId) {
-        this.email = email;
-        this.password = password;
-        this.updatedAt = updatedAt;
-        this.accountId = accountId;
-    }
+    @OneToOne
+    private Account account;
 }

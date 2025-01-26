@@ -1,35 +1,33 @@
 package com.feis.eduhub.backend.features.systemClass;
 
-import lombok.AllArgsConstructor;
+import java.util.Set;
+
+import com.feis.eduhub.backend.features.account.Account;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
+@Entity
 public class SystemClass {
-    @NonNull
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long classId;
-    @NonNull
     private String courseName;
-    @NonNull
     private String classAddress;
-    @NonNull
     private Integer classYear;
-    private Long teacherId;
-
-    public SystemClass(@NonNull String courseName, @NonNull String classAddress, @NonNull Integer classYear) {
-        this.courseName = courseName;
-        this.classAddress = classAddress;
-        this.classYear = classYear;
-    }
-
-    public SystemClass(@NonNull String courseName, @NonNull String classAddress, @NonNull Integer classYear,
-            Long teacherId) {
-        this.courseName = courseName;
-        this.classAddress = classAddress;
-        this.classYear = classYear;
-        this.teacherId = teacherId;
-    }
+    @ManyToOne
+    private Account teacher;
+    @ManyToMany
+    @JoinTable(name = "class_member", joinColumns = @JoinColumn(name = "class_id"), inverseJoinColumns = @JoinColumn(name = "member_id"))
+    private Set<Account> member;
 }

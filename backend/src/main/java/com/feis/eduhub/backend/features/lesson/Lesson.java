@@ -1,50 +1,46 @@
 package com.feis.eduhub.backend.features.lesson;
 
-import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.feis.eduhub.backend.features.account.Account;
+import com.feis.eduhub.backend.features.lessonAttendance.LessonAttendance;
+import com.feis.eduhub.backend.features.systemClass.SystemClass;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Entity
 public class Lesson {
-    @NonNull
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lessonId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    @NonNull
-    private Date lessonDate;
-    @NonNull
-    private Time startsAt;
-    @NonNull
+    private LocalDate lessonDate;
+    private LocalDateTime startsAt;
     private Time endsAt;
-    @NonNull
     private Integer roomNo;
-    private Long createdById;
-    @NonNull
-    private Long classId;
 
-    public Lesson(@NonNull Date lessonDate, @NonNull Time startsAt, @NonNull Time endsAt, @NonNull Integer roomNo,
-            @NonNull Long classId) {
-        this.lessonDate = lessonDate;
-        this.startsAt = startsAt;
-        this.endsAt = endsAt;
-        this.roomNo = roomNo;
-        this.classId = classId;
-    }
-
-    public Lesson(@NonNull Date lessonDate, @NonNull Time startsAt, @NonNull Time endsAt, @NonNull Integer roomNo,
-            Long createdById, @NonNull Long classId) {
-        this.lessonDate = lessonDate;
-        this.startsAt = startsAt;
-        this.endsAt = endsAt;
-        this.roomNo = roomNo;
-        this.createdById = createdById;
-        this.classId = classId;
-    }
+    @OneToOne
+    private Account createdBy;
+    @ManyToOne
+    private SystemClass systemClass;
+    @ManyToMany
+    private Set<Account> account;
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private Set<LessonAttendance> studentsAttendandes;
 }

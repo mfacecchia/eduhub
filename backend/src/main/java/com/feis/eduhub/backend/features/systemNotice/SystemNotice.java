@@ -1,30 +1,26 @@
 package com.feis.eduhub.backend.features.systemNotice;
 
-import lombok.AllArgsConstructor;
+import com.feis.eduhub.backend.features.account.Account;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Entity
 public class SystemNotice {
-    @NonNull
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long noticeId;
-    @NonNull
     private String noticeMessage;
-    @NonNull
-    private Long recipientId;
-    private Long senderId;
 
-    public SystemNotice(@NonNull String noticeMessage, @NonNull Long recipientId, Long senderId) {
-        this.noticeMessage = noticeMessage;
-        this.recipientId = recipientId;
-        this.senderId = senderId;
-    }
-
-    public SystemNotice(@NonNull String noticeMessage, @NonNull Long recipientId) {
-        this.noticeMessage = noticeMessage;
-        this.recipientId = recipientId;
-    }
+    @OneToOne
+    private Account recipient;
+    @OneToOne
+    private Account sender;
 }
